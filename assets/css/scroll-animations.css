@@ -367,6 +367,18 @@
 
 @media (max-width: 640px) {
   .hardhat-drop { width: 150px; height: 125px; }
+  .safety-scene { gap: 1rem; height: 100px; }
+  .harness-scene { height: 140px; }
+  .ledge-scene { height: 170px; }
+}
+
+@media (max-width: 480px) {
+  .hardhat-drop { width: 120px; height: 100px; }
+  .safety-scene { gap: 0.75rem; height: 80px; }
+  .harness-scene { height: 120px; }
+  .ledge-scene { height: 140px; }
+  .ledge-scene.is-rescued .ledge-worker { transform: translateX(-80px); }
+  .ledge-scene.is-rescued .ledge-rope { width: 80px; transform: translateX(-80px); }
 }
 
 /* Subtle impact flash under hat when it lands */

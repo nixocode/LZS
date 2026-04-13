@@ -396,7 +396,7 @@ a:hover {
    ============================================================ */
 .post-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: var(--space-xl);
 }
 
@@ -729,7 +729,7 @@ a:hover {
 }
 
 .blog-header__title {
-  font-size: var(--text-3xl);
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 700;
   margin-bottom: var(--space-sm);
 }
@@ -806,7 +806,7 @@ a:hover {
    ============================================================ */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: var(--space-xl);
 }
 
@@ -1033,6 +1033,7 @@ a:hover {
 
   .features-grid {
     grid-template-columns: 1fr;
+    gap: var(--space-lg);
   }
 
   .contact-grid {
@@ -1046,7 +1047,11 @@ a:hover {
   }
 
   .hero__title {
-    font-size: var(--text-2xl);
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+  }
+
+  .contact-card {
+    padding: var(--space-lg);
   }
 }
 
@@ -1117,7 +1122,7 @@ a:hover {
    ============================================================ */
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: var(--space-xl);
 }
 
@@ -1920,7 +1925,7 @@ a:hover {
 
 @media (max-width: 480px) {
   .stats-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: var(--space-md);
   }
 

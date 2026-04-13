@@ -9,8 +9,8 @@ description: >-
   construcción e industria. Observaciones preventivas, gestión de incidentes,
   estadísticas de riesgo y formación para profesionales de la prevención.
 
-url: "" # Se rellena con la URL de GitHub Pages, ej: https://usuario.github.io
-baseurl: "" # Dejar vacío si se usa dominio personalizado
+url: "https://nixocode.github.io"
+baseurl: "/LZS"
 
 # Idioma
 lang: es

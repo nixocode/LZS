@@ -1,0 +1,379 @@
+---
+layout: default
+title: "Quiz de Seguridad Industrial"
+permalink: /herramientas/quiz-seguridad/
+---
+
+<section class="quiz-page" id="quiz-page">
+  <div class="container container--narrow">
+    
+    <!-- Pantalla de inicio -->
+    <div class="quiz-intro" id="quiz-intro">
+      <div class="quiz-intro__icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h1 class="quiz-intro__title">Quiz de Seguridad Industrial</h1>
+      <p class="quiz-intro__desc">Pon a prueba tus conocimientos sobre seguridad en construcción e industria. 15 preguntas, 30 segundos por pregunta.</p>
+      <div class="quiz-intro__info">
+        <div class="quiz-intro__info-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>30 seg. por pregunta</span>
+        </div>
+        <div class="quiz-intro__info-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+          <span>15 preguntas</span>
+        </div>
+        <div class="quiz-intro__info-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Resultados detallados</span>
+        </div>
+      </div>
+      <button class="quiz-btn quiz-btn--primary" id="quiz-start" onclick="startQuiz()">Comenzar Quiz</button>
+    </div>
+
+    <!-- Pantalla de preguntas -->
+    <div class="quiz-game" id="quiz-game" style="display:none;">
+      <div class="quiz-hud">
+        <div class="quiz-hud__progress">
+          <span id="quiz-current">1</span> / <span id="quiz-total">15</span>
+        </div>
+        <div class="quiz-hud__timer" id="quiz-timer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="quiz-time">30</span>s
+        </div>
+        <div class="quiz-hud__score">
+          <span id="quiz-score">0</span> pts
+        </div>
+      </div>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-bar__fill" id="quiz-progress-fill"></div>
+      </div>
+      <div class="quiz-timer-bar">
+        <div class="quiz-timer-bar__fill" id="quiz-timer-fill"></div>
+      </div>
+      <div class="quiz-question" id="quiz-question-container">
+        <h2 class="quiz-question__text" id="quiz-question-text"></h2>
+        <div class="quiz-options" id="quiz-options"></div>
+      </div>
+      <div class="quiz-feedback" id="quiz-feedback" style="display:none;">
+        <div class="quiz-feedback__icon" id="quiz-feedback-icon"></div>
+        <p class="quiz-feedback__text" id="quiz-feedback-text"></p>
+        <button class="quiz-btn quiz-btn--secondary" id="quiz-next" onclick="nextQuestion()">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- Pantalla de resultados -->
+    <div class="quiz-results" id="quiz-results" style="display:none;">
+      <div class="quiz-results__badge" id="quiz-results-badge"></div>
+      <h2 class="quiz-results__title" id="quiz-results-title"></h2>
+      <p class="quiz-results__subtitle" id="quiz-results-subtitle"></p>
+      <div class="quiz-results__stats">
+        <div class="quiz-results__stat">
+          <span class="quiz-results__stat-value" id="result-correct">0</span>
+          <span class="quiz-results__stat-label">Correctas</span>
+        </div>
+        <div class="quiz-results__stat">
+          <span class="quiz-results__stat-value" id="result-wrong">0</span>
+          <span class="quiz-results__stat-label">Incorrectas</span>
+        </div>
+        <div class="quiz-results__stat">
+          <span class="quiz-results__stat-value" id="result-percent">0%</span>
+          <span class="quiz-results__stat-label">Puntuación</span>
+        </div>
+      </div>
+      <div class="quiz-results__chart-container">
+        <canvas id="quiz-results-chart" width="280" height="280"></canvas>
+      </div>
+      <h3 class="quiz-results__review-title">Repaso de respuestas</h3>
+      <div class="quiz-results__review" id="quiz-review"></div>
+      <div class="quiz-results__actions">
+        <button class="quiz-btn quiz-btn--primary" onclick="startQuiz()">Repetir Quiz</button>
+        <a href="{{ '/herramientas/' | relative_url }}" class="quiz-btn quiz-btn--secondary">Volver a herramientas</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "¿Cuál es la primera causa de accidente mortal en el sector de la construcción en España?",
+    options: ["Atrapamiento por maquinaria", "Caída en altura", "Riesgo eléctrico", "Caída de objetos"],
+    correct: 1,
+    explanation: "Las caídas en altura representan más del 30% de los fallecimientos laborales en construcción en España."
+  },
+  {
+    q: "En el procedimiento LOTO, ¿quién puede retirar un candado de bloqueo?",
+    options: ["El jefe de obra", "Cualquier técnico de prevención", "Solo la persona que lo instaló", "El encargado del turno"],
+    correct: 2,
+    explanation: "El principio fundamental del LOTO es que cada persona coloca su propio candado y solo ella puede retirarlo."
+  },
+  {
+    q: "¿Cuál es la concentración mínima de oxígeno para entrar en un espacio confinado sin ERA?",
+    options: ["17,5%", "19,5%", "21%", "23,5%"],
+    correct: 1,
+    explanation: "El rango seguro de oxígeno es 19,5% - 23,5%. Por debajo de 19,5% se requiere ventilación o Equipo de Respiración Autónomo."
+  },
+  {
+    q: "Según la jerarquía de controles ISO 45001, ¿cuál es la medida más eficaz?",
+    options: ["Equipos de Protección Individual", "Controles administrativos", "Eliminación del peligro", "Controles de ingeniería"],
+    correct: 2,
+    explanation: "La jerarquía va de más a menos eficaz: Eliminación > Sustitución > Ingeniería > Administrativos > EPI."
+  },
+  {
+    q: "¿Cuál es la altura mínima obligatoria de la barandilla de un andamio?",
+    options: ["0,5 metros", "0,8 metros", "1 metro", "1,2 metros"],
+    correct: 2,
+    explanation: "La normativa establece una altura mínima de 1 metro para el pasamanos superior, con listón intermedio y rodapié."
+  },
+  {
+    q: "¿Cuál es la velocidad máxima de viento generalmente permitida para operaciones de izado con grúa?",
+    options: ["20 km/h", "36 km/h", "50 km/h", "65 km/h"],
+    correct: 1,
+    explanation: "La velocidad máxima de viento generalmente aceptada es 36 km/h, aunque puede variar según el tipo de carga y grúa."
+  },
+  {
+    q: "En las mediciones atmosféricas de un espacio confinado, ¿a cuántos niveles se deben realizar las mediciones?",
+    options: ["1 (centro del espacio)", "2 (suelo y techo)", "3 (suelo, medio y techo)", "4 (incluido exterior)"],
+    correct: 2,
+    explanation: "Las mediciones se realizan a tres niveles porque los gases pesados se acumulan en el suelo y los ligeros en el techo."
+  },
+  {
+    q: "¿Qué es un 'near miss' o cuasi-accidente?",
+    options: ["Un accidente con lesiones leves", "Un suceso que pudo causar daño pero no lo hizo", "Un accidente sin testigos", "Un incidente con baja inferior a 3 días"],
+    correct: 1,
+    explanation: "Un cuasi-accidente (near miss) es un suceso que pudo causar daño pero no lo hizo. Investigarlos es clave para la prevención."
+  },
+  {
+    q: "¿Cuál es la tercera de las 5 reglas de oro del trabajo sin tensión?",
+    options: ["Bloqueo y señalización", "Desconexión", "Verificación de ausencia de tensión", "Puesta a tierra"],
+    correct: 2,
+    explanation: "El orden es: 1) Desconexión, 2) Bloqueo/señalización, 3) Verificación de ausencia de tensión, 4) Puesta a tierra, 5) Señalización zona."
+  },
+  {
+    q: "En un andamio, ¿cuál es la distancia máxima permitida entre la plataforma y el paramento del edificio?",
+    options: ["15 cm", "20 cm", "30 cm", "50 cm"],
+    correct: 2,
+    explanation: "La distancia máxima al paramento es de 30 cm. Un hueco mayor supone riesgo de caída entre el andamio y el edificio."
+  },
+  {
+    q: "El vigía de un espacio confinado, ¿puede entrar al espacio en caso de emergencia?",
+    options: ["Sí, siempre que lleve arnés", "Sí, si avisa al jefe de obra", "No, nunca debe entrar", "Sí, si no hay nadie más disponible"],
+    correct: 2,
+    explanation: "El vigía NUNCA debe entrar en el espacio confinado. Su función es activar el plan de rescate con personal y equipos preparados."
+  },
+  {
+    q: "¿Cuál es la distancia mínima de seguridad a una línea eléctrica aérea de alta tensión (>1 kV) para maquinaria de obra?",
+    options: ["1 metro", "3 metros", "5 metros", "10 metros"],
+    correct: 2,
+    explanation: "Para líneas de alta tensión (>1 kV), la distancia mínima general para maquinaria de obra es de 5 metros."
+  },
+  {
+    q: "Un riesgo con puntuación 20 en una matriz 5×5 se clasifica como:",
+    options: ["Alto", "Medio", "Muy alto", "Crítico"],
+    correct: 3,
+    explanation: "Una puntuación de 20 o superior se clasifica como Crítico y exige paralización de la actividad hasta reducción del nivel."
+  },
+  {
+    q: "¿Cada cuánto tiempo deben realizarse simulacros de rescate en espacios confinados?",
+    options: ["Cada mes", "Cada 3 meses", "Cada 6 meses", "Cada año"],
+    correct: 2,
+    explanation: "Los simulacros de rescate en espacios confinados deben realizarse al menos cada 6 meses en condiciones reales."
+  },
+  {
+    q: "El Índice de Frecuencia (IF) inferior a 10 en construcción se considera:",
+    options: ["Deficiente", "Mejorable", "Buen rendimiento", "Excelente"],
+    correct: 2,
+    explanation: "Un IF < 10 (accidentes con baja por millón de horas trabajadas) se considera buen rendimiento en el sector de la construcción."
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answers = [];
+let timerInterval = null;
+let timeLeft = 30;
+
+function startQuiz() {
+  currentQuestion = 0;
+  score = 0;
+  answers = [];
+  document.getElementById('quiz-intro').style.display = 'none';
+  document.getElementById('quiz-results').style.display = 'none';
+  document.getElementById('quiz-game').style.display = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = QUESTIONS[currentQuestion];
+  document.getElementById('quiz-current').textContent = currentQuestion + 1;
+  document.getElementById('quiz-total').textContent = QUESTIONS.length;
+  document.getElementById('quiz-score').textContent = score;
+  document.getElementById('quiz-question-text').textContent = q.q;
+  document.getElementById('quiz-feedback').style.display = 'none';
+  
+  const progressPercent = ((currentQuestion) / QUESTIONS.length) * 100;
+  document.getElementById('quiz-progress-fill').style.width = progressPercent + '%';
+  
+  const optionsEl = document.getElementById('quiz-options');
+  optionsEl.innerHTML = '';
+  q.options.forEach(function(opt, i) {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.textContent = opt;
+    btn.onclick = function() { selectAnswer(i); };
+    optionsEl.appendChild(btn);
+  });
+  
+  startTimer();
+}
+
+function startTimer() {
+  timeLeft = 30;
+  document.getElementById('quiz-time').textContent = timeLeft;
+  document.getElementById('quiz-timer-fill').style.width = '100%';
+  document.getElementById('quiz-timer-fill').classList.remove('quiz-timer-bar__fill--danger');
+  
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(function() {
+    timeLeft--;
+    document.getElementById('quiz-time').textContent = timeLeft;
+    document.getElementById('quiz-timer-fill').style.width = ((timeLeft / 30) * 100) + '%';
+    
+    if (timeLeft <= 10) {
+      document.getElementById('quiz-timer-fill').classList.add('quiz-timer-bar__fill--danger');
+    }
+    
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      selectAnswer(-1);
+    }
+  }, 1000);
+}
+
+function selectAnswer(idx) {
+  clearInterval(timerInterval);
+  const q = QUESTIONS[currentQuestion];
+  const isCorrect = idx === q.correct;
+  const optionBtns = document.querySelectorAll('.quiz-option');
+  
+  optionBtns.forEach(function(btn, i) {
+    btn.onclick = null;
+    btn.classList.add('quiz-option--disabled');
+    if (i === q.correct) {
+      btn.classList.add('quiz-option--correct');
+    } else if (i === idx && !isCorrect) {
+      btn.classList.add('quiz-option--wrong');
+    }
+  });
+  
+  if (isCorrect) {
+    score += 10 + Math.max(0, timeLeft);
+  }
+  
+  answers.push({
+    question: q.q,
+    selected: idx >= 0 ? q.options[idx] : 'Sin respuesta (tiempo agotado)',
+    correct: q.options[q.correct],
+    isCorrect: isCorrect,
+    explanation: q.explanation
+  });
+  
+  const feedbackEl = document.getElementById('quiz-feedback');
+  const feedbackIcon = document.getElementById('quiz-feedback-icon');
+  const feedbackText = document.getElementById('quiz-feedback-text');
+  
+  if (isCorrect) {
+    feedbackIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+    feedbackText.textContent = '¡Correcto! ' + q.explanation;
+    feedbackEl.className = 'quiz-feedback quiz-feedback--correct';
+  } else {
+    feedbackIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    feedbackText.textContent = (idx < 0 ? '¡Tiempo agotado! ' : 'Incorrecto. ') + q.explanation;
+    feedbackEl.className = 'quiz-feedback quiz-feedback--wrong';
+  }
+  
+  feedbackEl.style.display = 'block';
+  document.getElementById('quiz-score').textContent = score;
+  
+  if (currentQuestion >= QUESTIONS.length - 1) {
+    document.getElementById('quiz-next').textContent = 'Ver resultados →';
+  }
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= QUESTIONS.length) {
+    showResults();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-game').style.display = 'none';
+  document.getElementById('quiz-results').style.display = 'block';
+  
+  const correctCount = answers.filter(function(a) { return a.isCorrect; }).length;
+  const wrongCount = QUESTIONS.length - correctCount;
+  const percent = Math.round((correctCount / QUESTIONS.length) * 100);
+  
+  document.getElementById('result-correct').textContent = correctCount;
+  document.getElementById('result-wrong').textContent = wrongCount;
+  document.getElementById('result-percent').textContent = percent + '%';
+  
+  let badge, title, subtitle;
+  if (percent >= 80) {
+    badge = '<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+    title = '¡Experto en Seguridad!';
+    subtitle = 'Tus conocimientos de seguridad industrial son excelentes. Eres un referente en prevención.';
+  } else if (percent >= 50) {
+    badge = '<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+    title = 'Competente';
+    subtitle = 'Tienes una base sólida, pero hay áreas donde puedes mejorar. Repasa los artículos del blog.';
+  } else {
+    badge = '<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+    title = 'En formación';
+    subtitle = 'Necesitas reforzar tus conocimientos en seguridad industrial. Te recomendamos revisar nuestros artículos.';
+  }
+  
+  document.getElementById('quiz-results-badge').innerHTML = badge;
+  document.getElementById('quiz-results-title').textContent = title;
+  document.getElementById('quiz-results-subtitle').textContent = subtitle;
+  
+  // Results chart
+  const chartCtx = document.getElementById('quiz-results-chart');
+  if (chartCtx && typeof Chart !== 'undefined') {
+    new Chart(chartCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Correctas', 'Incorrectas'],
+        datasets: [{
+          data: [correctCount, wrongCount],
+          backgroundColor: ['#16a34a', '#dc2626'],
+          borderColor: '#ffffff',
+          borderWidth: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 13 }, padding: 20, usePointStyle: true } }
+        }
+      }
+    });
+  }
+  
+  // Review
+  const reviewEl = document.getElementById('quiz-review');
+  reviewEl.innerHTML = '';
+  answers.forEach(function(a, i) {
+    const div = document.createElement('div');
+    div.className = 'quiz-review-item ' + (a.isCorrect ? 'quiz-review-item--correct' : 'quiz-review-item--wrong');
+    div.innerHTML = '<div class="quiz-review-item__header"><span class="quiz-review-item__num">' + (i + 1) + '</span><span class="quiz-review-item__status">' + (a.isCorrect ? '✓ Correcta' : '✗ Incorrecta') + '</span></div><p class="quiz-review-item__question">' + a.question + '</p>' + (!a.isCorrect ? '<p class="quiz-review-item__answer">Tu respuesta: <strong>' + a.selected + '</strong></p><p class="quiz-review-item__correct">Respuesta correcta: <strong>' + a.correct + '</strong></p>' : '') + '<p class="quiz-review-item__explanation">' + a.explanation + '</p>';
+    reviewEl.appendChild(div);
+  });
+}
+</script>

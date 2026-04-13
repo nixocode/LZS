@@ -1,0 +1,372 @@
+---
+layout: default
+title: "Identificador de Riesgos — Juego de Observaciones Preventivas"
+permalink: /herramientas/identificador-riesgos/
+---
+
+<section class="hazard-page" id="hazard-page">
+  <div class="container container--narrow">
+
+    <!-- Pantalla de inicio -->
+    <div class="hazard-intro" id="hazard-intro">
+      <div class="hazard-intro__icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <h1 class="hazard-intro__title">Identificador de Riesgos</h1>
+      <p class="hazard-intro__desc">Analiza cada escenario industrial y selecciona todos los riesgos presentes. Practica tu observación preventiva como un auténtico técnico de prevención.</p>
+      <div class="quiz-intro__info">
+        <div class="quiz-intro__info-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>5 escenarios</span>
+        </div>
+        <div class="quiz-intro__info-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>4-5 riesgos por escenario</span>
+        </div>
+        <div class="quiz-intro__info-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Feedback inmediato</span>
+        </div>
+      </div>
+      <button class="quiz-btn quiz-btn--primary" onclick="startHazard()">Comenzar</button>
+    </div>
+
+    <!-- Pantalla de juego -->
+    <div class="hazard-game" id="hazard-game" style="display:none;">
+      <div class="quiz-hud">
+        <div class="quiz-hud__progress">Escenario <span id="hazard-current">1</span> / <span id="hazard-total">5</span></div>
+        <div class="quiz-hud__score"><span id="hazard-score">0</span> pts</div>
+      </div>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-bar__fill" id="hazard-progress-fill"></div>
+      </div>
+
+      <div class="hazard-scenario" id="hazard-scenario">
+        <div class="hazard-scenario__header">
+          <div class="hazard-scenario__icon" id="hazard-scenario-icon"></div>
+          <h2 class="hazard-scenario__title" id="hazard-scenario-title"></h2>
+        </div>
+        <p class="hazard-scenario__desc" id="hazard-scenario-desc"></p>
+        <div class="hazard-scenario__details" id="hazard-scenario-details"></div>
+      </div>
+
+      <h3 class="hazard-prompt">Selecciona todos los riesgos que identifiques:</h3>
+      <div class="hazard-options" id="hazard-options"></div>
+
+      <button class="quiz-btn quiz-btn--primary hazard-check-btn" id="hazard-check" onclick="checkHazards()" style="display:none;">Comprobar selección</button>
+
+      <div class="hazard-feedback" id="hazard-feedback" style="display:none;"></div>
+
+      <button class="quiz-btn quiz-btn--secondary" id="hazard-next" onclick="nextScenario()" style="display:none;">Siguiente escenario →</button>
+    </div>
+
+    <!-- Pantalla de resultados -->
+    <div class="hazard-results" id="hazard-results" style="display:none;">
+      <div class="quiz-results__badge" id="hazard-results-badge"></div>
+      <h2 class="quiz-results__title" id="hazard-results-title"></h2>
+      <p class="quiz-results__subtitle" id="hazard-results-subtitle"></p>
+      <div class="quiz-results__stats">
+        <div class="quiz-results__stat">
+          <span class="quiz-results__stat-value" id="hazard-found">0</span>
+          <span class="quiz-results__stat-label">Riesgos encontrados</span>
+        </div>
+        <div class="quiz-results__stat">
+          <span class="quiz-results__stat-value" id="hazard-missed">0</span>
+          <span class="quiz-results__stat-label">Riesgos no detectados</span>
+        </div>
+        <div class="quiz-results__stat">
+          <span class="quiz-results__stat-value" id="hazard-false">0</span>
+          <span class="quiz-results__stat-label">Falsos positivos</span>
+        </div>
+      </div>
+      <div class="quiz-results__chart-container">
+        <canvas id="hazard-results-chart" width="280" height="280"></canvas>
+      </div>
+      <div class="quiz-results__actions">
+        <button class="quiz-btn quiz-btn--primary" onclick="startHazard()">Repetir</button>
+        <a href="{{ '/herramientas/' | relative_url }}" class="quiz-btn quiz-btn--secondary">Volver a herramientas</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const SCENARIOS = [
+  {
+    title: "Obra de edificación — Trabajos en la cubierta",
+    icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+    desc: "Estás realizando una observación preventiva en una obra de edificación. Varios trabajadores están realizando tareas en la cubierta del edificio (planta 6). Observas la siguiente situación:",
+    details: [
+      "Dos operarios instalan impermeabilización en el borde de la cubierta, a 18 metros de altura.",
+      "El andamio perimetral no tiene rodapié en el frente donde trabajan.",
+      "Un operario lleva casco pero no tiene arnés de seguridad.",
+      "El segundo operario lleva arnés pero está anclado a una tubería de PVC del desagüe.",
+      "Hay materiales acopiados bloqueando parcialmente la vía de acceso a la salida de emergencia.",
+      "La señalización de la obra está correctamente instalada en el perímetro exterior."
+    ],
+    options: [
+      { text: "Ausencia de rodapié en el andamio", isHazard: true, explanation: "El rodapié es obligatorio para evitar la caída de objetos sobre los trabajadores de niveles inferiores." },
+      { text: "Trabajador sin arnés en borde de cubierta", isHazard: true, explanation: "A 18 m de altura y en borde de cubierta, el arnés es obligatorio. Riesgo de caída mortal." },
+      { text: "Arnés anclado a tubería de PVC (no resistente)", isHazard: true, explanation: "El punto de anclaje debe resistir 10 kN. Una tubería de PVC cedería al peso de una caída, invalidando totalmente el arnés." },
+      { text: "Vía de evacuación parcialmente bloqueada", isHazard: true, explanation: "Las vías de evacuación deben estar siempre libres de obstáculos. En caso de emergencia, cada segundo cuenta." },
+      { text: "Falta de señalización en el perímetro exterior", isHazard: false, explanation: "El escenario indica que la señalización exterior está correctamente instalada." },
+      { text: "Ausencia de red de seguridad bajo la cubierta", isHazard: true, explanation: "En trabajos en borde de cubierta, la red tipo S (horizontal) o protección colectiva equivalente es necesaria como medida complementaria." },
+      { text: "Los dos operarios trabajan solos sin supervisión", isHazard: false, explanation: "No se menciona la ausencia de supervisión. Un encargado puede estar presente sin ser mencionado." }
+    ]
+  },
+  {
+    title: "Planta industrial — Mantenimiento de equipo rotativo",
+    icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+    desc: "En una planta petroquímica, un equipo de mantenimiento va a intervenir en un compresor de gas para sustituir un rodamiento. Observas la siguiente preparación:",
+    details: [
+      "El permiso de trabajo ha sido emitido y firmado por el jefe de turno.",
+      "El compresor se ha detenido y el seccionador eléctrico está abierto.",
+      "No se ha colocado candado LOTO en el seccionador; solo tiene una tarjeta colgada.",
+      "La presión residual del circuito de gas no ha sido purgada.",
+      "Los técnicos llevan guantes mecánicos pero no gafas de protección.",
+      "El detector de gases portátil está encendido y muestra lecturas en rango seguro."
+    ],
+    options: [
+      { text: "Falta de candado LOTO en el seccionador", isHazard: true, explanation: "Una tarjeta no impide físicamente la reactivación. El candado LOTO es el único medio que garantiza que nadie pueda reconectar el equipo." },
+      { text: "Presión residual no purgada (energía neumática)", isHazard: true, explanation: "El procedimiento LOTO exige disipar TODA la energía residual. La presión de gas no purgada puede causar proyección de piezas o fuga tóxica." },
+      { text: "Ausencia de gafas de protección", isHazard: true, explanation: "Al desmontar un rodamiento pueden desprenderse fragmentos metálicos, grasa a presión o polvo. Las gafas de protección son obligatorias." },
+      { text: "El detector de gases está fuera de calibración", isHazard: false, explanation: "El escenario indica que el detector está encendido y muestra lecturas normales. No se indica que esté fuera de calibración." },
+      { text: "No se ha verificado la ausencia de tensión con VAT", isHazard: true, explanation: "Abrir el seccionador no es suficiente. La 3ª regla de oro exige verificar la ausencia de tensión con Verificador de Ausencia de Tensión (VAT)." },
+      { text: "El permiso de trabajo está incompleto", isHazard: false, explanation: "El escenario indica que el permiso ha sido emitido y firmado correctamente." }
+    ]
+  },
+  {
+    title: "Excavación profunda — Instalación de colector",
+    icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h12"/><path d="M12 6v12"/></svg>',
+    desc: "En una obra de urbanización, se está instalando un colector de saneamiento en una zanja de 4 metros de profundidad. Observas lo siguiente durante tu inspección:",
+    details: [
+      "La zanja tiene 4 metros de profundidad y 2 metros de ancho en terreno arcilloso.",
+      "Las paredes de la zanja no tienen entibación ni talud de seguridad.",
+      "Dos operarios trabajan en el fondo de la zanja.",
+      "La escalera de acceso está situada a 25 metros del punto de trabajo.",
+      "Hay un acopio de tubos de hormigón a 1,5 metros del borde de la zanja.",
+      "Un retroexcavadora opera a 3 metros del borde de la zanja.",
+      "Los operarios llevan casco, chaleco y botas de seguridad."
+    ],
+    options: [
+      { text: "Zanja sin entibación ni talud a 4 m de profundidad", isHazard: true, explanation: "A 4 m de profundidad en terreno arcilloso, la entibación o el talud de seguridad es absolutamente obligatorio. El riesgo de desmoronamiento es muy alto." },
+      { text: "Escalera de acceso a 25 m del punto de trabajo", isHazard: true, explanation: "La normativa exige un acceso cada 15 metros máximo. En caso de emergencia (inundación, desmoronamiento), 25 metros puede ser una distancia mortal." },
+      { text: "Acopio de materiales demasiado cerca del borde", isHazard: true, explanation: "Los acopios deben situarse a más de 2 metros del borde para evitar sobrecargas en el terreno y caída de objetos al interior de la zanja." },
+      { text: "Maquinaria operando cerca del borde de la zanja", isHazard: true, explanation: "La vibración de la retroexcavadora a 3 m del borde puede desestabilizar las paredes de la zanja, especialmente sin entibación." },
+      { text: "Los operarios no llevan arnés de seguridad", isHazard: false, explanation: "En el fondo de una zanja de 4 m, el arnés no es el EPI adecuado. La protección correcta es la entibación de las paredes." },
+      { text: "No hay bomba de achique preparada", isHazard: true, explanation: "En zanjas profundas, la irrupción de agua (rotura de conducción existente, lluvia, nivel freático) es un riesgo que requiere bomba de achique accesible." }
+    ]
+  },
+  {
+    title: "Espacio confinado — Limpieza de depósito",
+    icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 10h16"/><path d="M10 2v8"/></svg>',
+    desc: "En una fábrica de productos químicos se va a realizar la limpieza interior de un depósito de almacenamiento de disolventes. El depósito tiene una boca de hombre de 60 cm de diámetro. Observas:",
+    details: [
+      "El depósito contenía previamente tolueno (disolvente inflamable).",
+      "Se ha emitido un permiso de trabajo para espacio confinado.",
+      "Las mediciones de atmósfera se realizaron hace 3 horas, mostrando valores seguros.",
+      "El vigía asignado está hablando por teléfono con el almacén para pedir material.",
+      "El equipo de rescate disponible consiste en una cuerda y un arnés.",
+      "La ventilación forzada está funcionando con un extractor eléctrico estándar (no ATEX)."
+    ],
+    options: [
+      { text: "Mediciones atmosféricas caducadas (hace 3 horas)", isHazard: true, explanation: "Las condiciones en un espacio confinado pueden cambiar en minutos. Las mediciones deben repetirse inmediatamente antes de cada entrada y mantenerse de forma continua." },
+      { text: "Vigía distraído con tareas adicionales", isHazard: true, explanation: "El vigía debe mantener vigilancia EXCLUSIVA del espacio confinado. No puede tener ninguna otra tarea asignada. Un vigía distraído es un vigía que no puede activar el rescate." },
+      { text: "Equipo de rescate insuficiente", isHazard: true, explanation: "Un espacio confinado exige trípode con izado, ERA para los rescatadores, camilla vertical y detector multigás. Una cuerda y un arnés son totalmente insuficientes." },
+      { text: "Ventilación con equipos no ATEX en atmósfera potencialmente explosiva", isHazard: true, explanation: "Tras almacenar tolueno (inflamable), el equipo eléctrico dentro o cerca del espacio debe ser ATEX (antiexplosivo). Un extractor estándar puede generar chispas." },
+      { text: "El permiso de trabajo no cubre la limpieza específica", isHazard: false, explanation: "El escenario indica que se ha emitido un permiso de trabajo específico para espacio confinado." },
+      { text: "No se ha realizado purga/lavado del depósito", isHazard: true, explanation: "Antes de entrar en un depósito que contenía disolventes, debe realizarse un lavado/purga completo para reducir la concentración de vapores residuales." }
+    ]
+  },
+  {
+    title: "Montaje de estructura metálica — Nave industrial",
+    icon: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/><path d="M9 20v-6h6v6"/></svg>',
+    desc: "Una subcontrata de estructuras metálicas está montando los pórticos de una nave industrial. Los pórticos pesan 3,5 toneladas cada uno y se izan con una grúa móvil de 80 t. Observas:",
+    details: [
+      "La grúa móvil tiene los estabilizadores desplegados sobre el suelo natural (sin placas de reparto).",
+      "El plan de izaje indica un radio máximo de 15 m, pero la grúa está operando a 18 m del pórtico.",
+      "Un soldador trabaja sin pantalla facial, usando solo gafas de sol oscuras.",
+      "Dos trabajadores se encuentran bajo la carga suspendida mientras posicionan los anclajes.",
+      "El señalista dirige la maniobra mientras ayuda a colocar tornillos en la base del pórtico anterior.",
+      "El viento sopla a 20 km/h, dentro del límite permitido."
+    ],
+    options: [
+      { text: "Estabilizadores sin placas de reparto sobre suelo natural", isHazard: true, explanation: "Sin placas de reparto, los estabilizadores pueden hundirse en el terreno y provocar el vuelco de la grúa. Las placas distribuyen la presión sobre una superficie mayor." },
+      { text: "Radio de trabajo superior al previsto en el plan de izaje", isHazard: true, explanation: "Operar a 18 m cuando el plan dice 15 m reduce drásticamente la capacidad de carga de la grúa. Una grúa de 80 t a 18 m puede tener la mitad de capacidad que a 15 m." },
+      { text: "Soldador sin protección facial adecuada", isHazard: true, explanation: "Las gafas de sol no protegen contra la radiación ultravioleta e infrarroja de la soldadura. Se requiere pantalla con filtro certificado DIN para evitar quemaduras retinianas." },
+      { text: "Trabajadores bajo carga suspendida", isHazard: true, explanation: "Trabajar bajo una carga suspendida es una de las infracciones más graves en seguridad. Si la carga cae, 3,5 toneladas son letales desde cualquier altura." },
+      { text: "Señalista realizando tareas adicionales", isHazard: true, explanation: "El señalista debe tener dedicación EXCLUSIVA durante la maniobra. Si está colocando tornillos, no puede ver la carga ni comunicarse con el gruista." },
+      { text: "Viento de 20 km/h durante el izaje", isHazard: false, explanation: "20 km/h está dentro del límite habitual de 36 km/h. Aunque conviene vigilarlo, no constituye un riesgo por sí solo en estas condiciones." }
+    ]
+  }
+];
+
+let currentScenario = 0;
+let hazardScore = 0;
+let totalFound = 0;
+let totalMissed = 0;
+let totalFalse = 0;
+
+function startHazard() {
+  currentScenario = 0;
+  hazardScore = 0;
+  totalFound = 0;
+  totalMissed = 0;
+  totalFalse = 0;
+  document.getElementById('hazard-intro').style.display = 'none';
+  document.getElementById('hazard-results').style.display = 'none';
+  document.getElementById('hazard-game').style.display = 'block';
+  showScenario();
+}
+
+function showScenario() {
+  const s = SCENARIOS[currentScenario];
+  document.getElementById('hazard-current').textContent = currentScenario + 1;
+  document.getElementById('hazard-total').textContent = SCENARIOS.length;
+  document.getElementById('hazard-score').textContent = hazardScore;
+  document.getElementById('hazard-scenario-icon').innerHTML = s.icon;
+  document.getElementById('hazard-scenario-title').textContent = s.title;
+  document.getElementById('hazard-scenario-desc').textContent = s.desc;
+  
+  const progressPercent = ((currentScenario) / SCENARIOS.length) * 100;
+  document.getElementById('hazard-progress-fill').style.width = progressPercent + '%';
+  
+  const detailsEl = document.getElementById('hazard-scenario-details');
+  detailsEl.innerHTML = '<ul>' + s.details.map(function(d) { return '<li>' + d + '</li>'; }).join('') + '</ul>';
+  
+  const optionsEl = document.getElementById('hazard-options');
+  optionsEl.innerHTML = '';
+  s.options.forEach(function(opt, i) {
+    const label = document.createElement('label');
+    label.className = 'hazard-option';
+    label.innerHTML = '<input type="checkbox" class="hazard-option__checkbox" data-index="' + i + '"><span class="hazard-option__check"></span><span class="hazard-option__text">' + opt.text + '</span>';
+    label.querySelector('input').addEventListener('change', function() {
+      document.getElementById('hazard-check').style.display = 'block';
+    });
+    optionsEl.appendChild(label);
+  });
+  
+  document.getElementById('hazard-check').style.display = 'none';
+  document.getElementById('hazard-feedback').style.display = 'none';
+  document.getElementById('hazard-feedback').innerHTML = '';
+  document.getElementById('hazard-next').style.display = 'none';
+}
+
+function checkHazards() {
+  const s = SCENARIOS[currentScenario];
+  const checkboxes = document.querySelectorAll('.hazard-option__checkbox');
+  let found = 0, missed = 0, falsePos = 0;
+  let feedbackHTML = '';
+  
+  checkboxes.forEach(function(cb) {
+    cb.disabled = true;
+  });
+  
+  const options = document.querySelectorAll('.hazard-option');
+  
+  s.options.forEach(function(opt, i) {
+    const cb = checkboxes[i];
+    const selected = cb.checked;
+    const label = options[i];
+    
+    if (opt.isHazard && selected) {
+      found++;
+      label.classList.add('hazard-option--correct');
+      feedbackHTML += '<div class="hazard-fb-item hazard-fb-item--correct"><strong>✓ ' + opt.text + '</strong> — ' + opt.explanation + '</div>';
+    } else if (opt.isHazard && !selected) {
+      missed++;
+      label.classList.add('hazard-option--missed');
+      feedbackHTML += '<div class="hazard-fb-item hazard-fb-item--missed"><strong>✗ No detectado: ' + opt.text + '</strong> — ' + opt.explanation + '</div>';
+    } else if (!opt.isHazard && selected) {
+      falsePos++;
+      label.classList.add('hazard-option--wrong');
+      feedbackHTML += '<div class="hazard-fb-item hazard-fb-item--wrong"><strong>⚠ Falso positivo: ' + opt.text + '</strong> — ' + opt.explanation + '</div>';
+    } else {
+      label.classList.add('hazard-option--safe');
+    }
+  });
+  
+  totalFound += found;
+  totalMissed += missed;
+  totalFalse += falsePos;
+  hazardScore += found * 10 - falsePos * 5;
+  
+  document.getElementById('hazard-score').textContent = Math.max(0, hazardScore);
+  document.getElementById('hazard-check').style.display = 'none';
+  
+  const totalHazards = s.options.filter(function(o) { return o.isHazard; }).length;
+  feedbackHTML = '<div class="hazard-fb-summary"><strong>' + found + ' de ' + totalHazards + ' riesgos detectados</strong>' + (falsePos > 0 ? ' · ' + falsePos + ' falso(s) positivo(s)' : '') + '</div>' + feedbackHTML;
+  
+  document.getElementById('hazard-feedback').innerHTML = feedbackHTML;
+  document.getElementById('hazard-feedback').style.display = 'block';
+  
+  if (currentScenario >= SCENARIOS.length - 1) {
+    document.getElementById('hazard-next').textContent = 'Ver resultados →';
+  }
+  document.getElementById('hazard-next').style.display = 'block';
+}
+
+function nextScenario() {
+  currentScenario++;
+  if (currentScenario >= SCENARIOS.length) {
+    showHazardResults();
+  } else {
+    showScenario();
+  }
+}
+
+function showHazardResults() {
+  document.getElementById('hazard-game').style.display = 'none';
+  document.getElementById('hazard-results').style.display = 'block';
+  
+  document.getElementById('hazard-found').textContent = totalFound;
+  document.getElementById('hazard-missed').textContent = totalMissed;
+  document.getElementById('hazard-false').textContent = totalFalse;
+  
+  const totalHazards = SCENARIOS.reduce(function(sum, s) { return sum + s.options.filter(function(o) { return o.isHazard; }).length; }, 0);
+  const percent = Math.round((totalFound / totalHazards) * 100);
+  
+  let badge, title, subtitle;
+  if (percent >= 80 && totalFalse <= 2) {
+    badge = '<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+    title = '¡Experto Observador!';
+    subtitle = 'Tu capacidad de identificación de riesgos es excepcional. Serías un excelente técnico de OPS.';
+  } else if (percent >= 50) {
+    badge = '<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    title = 'Buen observador';
+    subtitle = 'Detectas la mayoría de riesgos, pero algunos se te escapan. Sigue practicando para mejorar.';
+  } else {
+    badge = '<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    title = 'Necesitas más práctica';
+    subtitle = 'Se te escapan muchos riesgos importantes. Repasa los artículos del blog y vuelve a intentarlo.';
+  }
+  
+  document.getElementById('hazard-results-badge').innerHTML = badge;
+  document.getElementById('hazard-results-title').textContent = title;
+  document.getElementById('hazard-results-subtitle').textContent = subtitle;
+  
+  const chartCtx = document.getElementById('hazard-results-chart');
+  if (chartCtx && typeof Chart !== 'undefined') {
+    new Chart(chartCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Detectados', 'No detectados', 'Falsos positivos'],
+        datasets: [{
+          data: [totalFound, totalMissed, totalFalse],
+          backgroundColor: ['#16a34a', '#dc2626', '#f59e0b'],
+          borderColor: '#ffffff',
+          borderWidth: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 13 }, padding: 20, usePointStyle: true } }
+        }
+      }
+    });
+  }
+}
+</script>

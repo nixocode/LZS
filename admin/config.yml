@@ -1,0 +1,70 @@
+backend:
+  name: github
+  repo: USUARIO/NOMBRE-DEL-REPOSITORIO   # ← Cambia esto por tu usuario/repositorio de GitHub
+  branch: main                            # ← O "master", según tu configuración
+  site_domain: TU-DOMINIO.netlify.app     # ← Necesario para la autenticación OAuth (ver SETUP.md)
+
+# Carpeta donde se suben las imágenes
+media_folder: "assets/images/uploads"
+public_folder: "/assets/images/uploads"
+
+# Idioma de la interfaz
+locale: "es"
+
+# Slug (URLs amigables)
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  - name: "blog"
+    label: "Artículos del blog"
+    folder: "_posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: true
+    fields:
+      - label: "Layout"
+        name: "layout"
+        widget: "hidden"
+        default: "post"
+
+      - label: "Título"
+        name: "title"
+        widget: "string"
+        required: true
+
+      - label: "Fecha de publicación"
+        name: "date"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: true
+
+      - label: "Descripción corta"
+        name: "description"
+        widget: "string"
+        required: false
+        hint: "Una frase que resume el artículo. Aparecerá en las tarjetas del blog y en buscadores."
+
+      - label: "Imagen destacada"
+        name: "image"
+        widget: "image"
+        required: false
+        hint: "Opcional. La imagen aparecerá en la cabecera del artículo."
+        media_folder: "/assets/images/uploads"
+
+      - label: "Autor"
+        name: "author"
+        widget: "string"
+        default: "La Zona Segura"
+        required: false
+
+      - label: "Contenido"
+        name: "body"
+        widget: "markdown"
+        required: true
+        hint: "Escribe el contenido del artículo. Puedes usar negritas, listas, imágenes y enlaces."

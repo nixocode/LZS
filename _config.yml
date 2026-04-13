@@ -1,0 +1,83 @@
+# ============================================================
+# La Zona Segura — Configuración del sitio
+# ============================================================
+
+title: "La Zona Segura"
+tagline: "Gestión del riesgo en construcción e industria"
+description: >-
+  Blog profesional en español dedicado a la seguridad laboral en obras de
+  construcción e industria. Observaciones preventivas, gestión de incidentes,
+  estadísticas de riesgo y formación para profesionales de la prevención.
+
+url: "" # Se rellena con la URL de GitHub Pages, ej: https://usuario.github.io
+baseurl: "" # Dejar vacío si se usa dominio personalizado
+
+# Idioma
+lang: es
+
+# Autor por defecto
+author:
+  name: "La Zona Segura"
+  email: "contacto@lazonasegura.es"
+
+# Tema
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Configuración de Minima
+minima:
+  skin: classic
+
+# Configuración de colección de posts
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "La Zona Segura"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Paginación
+# paginate: 6
+# paginate_path: "/blog/page:num/"
+
+# Formato de enlaces permanentes
+permalink: /blog/:year/:month/:day/:title/
+
+# Excluir archivos del build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - SETUP.md
+  - README.md
+  - CNAME
+  - .gitignore
+  - .gemini
+
+# Incluir archivos especiales
+include:
+  - admin
+
+# Feed RSS
+feed:
+  path: feed.xml
+
+# Zona horaria
+timezone: Europe/Madrid
+
+# Markdown
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false

@@ -1,0 +1,17 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+.bundle/
+*.gem
+.DS_Store
+.gemini/
+.env
+.env.*
+*.pem
+*.key
+node_modules/
+.vscode/
+.idea/
+.claude/

@@ -1,0 +1,186 @@
+<header class="site-header" id="site-header">
+  <div class="container site-header__inner">
+    <a href="{{ '/' | relative_url }}" class="site-header__brand" aria-label="Ir al inicio">
+      <svg class="site-header__icon-svg" width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hard hat / helmet -->
+        <path d="M8 38c0 0 0-18 24-18s24 18 24 18" fill="var(--color-primary)" stroke="var(--color-primary-dark)" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="4" y="36" width="56" height="8" rx="4" fill="var(--color-primary)" stroke="var(--color-primary-dark)" stroke-width="2.5"/>
+        <path d="M14 36V28c0-10 8-16 18-16s18 6 18 16v8" stroke="var(--color-primary-dark)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- Top ridge -->
+        <path d="M22 20c0 0 4-4 10-4s10 4 10 4" stroke="var(--color-primary-dark)" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <!-- Highlight -->
+        <path d="M18 30c0-6 6-12 14-12" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="site-header__title">{{ site.title }}</span>
+    </a>
+
+    <div class="site-header__actions">
+      <!-- Search toggle -->
+      <button class="site-header__action-btn" id="search-toggle" aria-label="Buscar artículos" title="Buscar (Cmd+K)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+
+      <!-- Dark mode toggle -->
+      <button class="site-header__action-btn" id="theme-toggle" aria-label="Cambiar tema" title="Modo oscuro / claro">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+
+      <!-- Mobile nav toggle -->
+      <button class="site-header__toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <nav class="site-nav" id="main-nav" aria-label="Navegación principal">
+      <ul class="site-nav__list">
+        <li class="site-nav__item">
+          <a href="{{ '/' | relative_url }}" class="site-nav__link{% if page.url == '/' %} site-nav__link--active{% endif %}">Inicio</a>
+        </li>
+        <li class="site-nav__item">
+          <a href="{{ '/blog/' | relative_url }}" class="site-nav__link{% if page.url contains '/blog' %} site-nav__link--active{% endif %}">Blog</a>
+        </li>
+        <li class="site-nav__item">
+          <a href="{{ '/herramientas/' | relative_url }}" class="site-nav__link{% if page.url contains '/herramientas' %} site-nav__link--active{% endif %}">Herramientas</a>
+        </li>
+        <li class="site-nav__item">
+          <a href="{{ '/sobre-nosotros/' | relative_url }}" class="site-nav__link{% if page.url == '/sobre-nosotros/' %} site-nav__link--active{% endif %}">Sobre nosotros</a>
+        </li>
+        <li class="site-nav__item">
+          <a href="{{ '/contacto/' | relative_url }}" class="site-nav__link{% if page.url == '/contacto/' %} site-nav__link--active{% endif %}">Contacto</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="search-overlay" aria-hidden="true">
+  <div class="search-overlay__inner">
+    <div class="search-overlay__header">
+      <div class="search-overlay__input-wrapper">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-overlay__input" id="search-input" placeholder="Buscar artículos, herramientas..." autocomplete="off">
+      </div>
+      <button class="search-overlay__close" id="search-close" aria-label="Cerrar búsqueda">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="search-overlay__results" id="search-results">
+      <p class="search-overlay__hint">Escribe para buscar entre todos los artículos y herramientas</p>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Mobile nav toggle
+  const toggle = document.getElementById('nav-toggle');
+  const nav = document.getElementById('main-nav');
+  if (toggle && nav) {
+    toggle.addEventListener('click', function() {
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', !expanded);
+      nav.classList.toggle('site-nav--open');
+      this.classList.toggle('site-header__toggle--active');
+    });
+  }
+
+  // Dark mode toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
+  }
+
+  // Search overlay
+  const searchToggle = document.getElementById('search-toggle');
+  const searchOverlay = document.getElementById('search-overlay');
+  const searchClose = document.getElementById('search-close');
+  const searchInput = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+
+  // Search data (built at compile time by Jekyll)
+  var searchData = [
+    {% for post in site.posts %}
+    {
+      title: {{ post.title | jsonify }},
+      url: "{{ post.url | relative_url }}",
+      excerpt: {{ post.excerpt | strip_html | truncatewords: 40 | jsonify }},
+      date: "{{ post.date | date: '%d/%m/%Y' }}",
+      tags: {{ post.tags | jsonify | default: '[]' }},
+      category: {{ post.category | jsonify | default: '""' }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+
+  function openSearch() {
+    searchOverlay.setAttribute('aria-hidden', 'false');
+    searchOverlay.classList.add('search-overlay--open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() { searchInput.focus(); }, 100);
+  }
+
+  function closeSearch() {
+    searchOverlay.setAttribute('aria-hidden', 'true');
+    searchOverlay.classList.remove('search-overlay--open');
+    document.body.style.overflow = '';
+    searchInput.value = '';
+    searchResults.innerHTML = '<p class="search-overlay__hint">Escribe para buscar entre todos los artículos y herramientas</p>';
+  }
+
+  if (searchToggle) searchToggle.addEventListener('click', openSearch);
+  if (searchClose) searchClose.addEventListener('click', closeSearch);
+  if (searchOverlay) {
+    searchOverlay.addEventListener('click', function(e) {
+      if (e.target === searchOverlay) closeSearch();
+    });
+  }
+
+  // Keyboard: Ctrl/Cmd+K to open, Escape to close
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape' && searchOverlay.classList.contains('search-overlay--open')) {
+      closeSearch();
+    }
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var query = this.value.toLowerCase().trim();
+      if (query.length < 2) {
+        searchResults.innerHTML = '<p class="search-overlay__hint">Escribe para buscar entre todos los artículos y herramientas</p>';
+        return;
+      }
+
+      var matches = searchData.filter(function(item) {
+        return item.title.toLowerCase().includes(query) ||
+               item.excerpt.toLowerCase().includes(query) ||
+               (item.tags && item.tags.some(function(t) { return t.toLowerCase().includes(query); }));
+      });
+
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<p class="search-overlay__no-results">No se encontraron resultados para "<strong>' + query + '</strong>"</p>';
+        return;
+      }
+
+      searchResults.innerHTML = '<p class="search-overlay__count">' + matches.length + ' resultado(s)</p>' +
+        matches.map(function(m) {
+          return '<a href="' + m.url + '" class="search-result"><div class="search-result__title">' + m.title + '</div><div class="search-result__meta">' + m.date + (m.tags.length > 0 ? ' · ' + m.tags.join(', ') : '') + '</div><div class="search-result__excerpt">' + m.excerpt + '</div></a>';
+        }).join('');
+    });
+  }
+});
+</script>

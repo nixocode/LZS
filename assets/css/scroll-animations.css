@@ -1,0 +1,672 @@
+/* ============================================================
+   Cinematic Scroll Animations — "Cada Scroll Salva una Vida"
+   Scoped to body.home-cinematic so non-home pages are untouched.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.home-cinematic {
+  --cin-bg: #0a0c0f;
+  --cin-bg-soft: #11141a;
+  --cin-amber: #f59e0b;
+  --cin-amber-bright: #fbbf24;
+  --cin-red: #ef4444;
+  --cin-blueprint: #38bdf8;
+  --cin-ink: #e5e7eb;
+  --cin-muted: #9ca3af;
+  --cin-heading: 'Bebas Neue', 'Inter', sans-serif;
+}
+
+/* ---------- Scroll progress bar ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 1000;
+  pointer-events: none;
+}
+.scroll-progress__bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #b45309 0%, var(--cin-amber) 50%, var(--cin-amber-bright) 100%);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.65);
+  transition: width 60ms linear;
+}
+
+/* ---------- Fixed dust / particle canvas ---------- */
+.dust-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
+/* ---------- Global atmosphere over home ---------- */
+.home-cinematic .site-content {
+  position: relative;
+  background: var(--cin-bg);
+  color: var(--cin-ink);
+}
+.home-cinematic .site-content::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% -10%, rgba(245, 158, 11, 0.08), transparent 55%),
+    radial-gradient(ellipse at 80% 110%, rgba(239, 68, 68, 0.05), transparent 55%),
+    linear-gradient(180deg, #07090c 0%, #0a0c0f 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+.home-cinematic .site-content > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- Hero: cinematic overlay, parallax, light shafts ---------- */
+.home-cinematic .hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 92vh;
+  background-color: var(--cin-bg);
+  background-blend-mode: multiply;
+  isolation: isolate;
+}
+.home-cinematic .hero__overlay {
+  background: linear-gradient(180deg, rgba(10, 12, 15, 0.55) 0%, rgba(10, 12, 15, 0.85) 70%, #0a0c0f 100%) !important;
+}
+.home-cinematic .hero__title {
+  font-family: var(--cin-heading);
+  letter-spacing: 0.04em;
+  font-weight: 400;
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  line-height: 0.95;
+  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.8);
+}
+.home-cinematic .hero__tagline {
+  color: var(--cin-amber);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.home-cinematic .hero__description {
+  color: #d1d5db;
+  max-width: 620px;
+}
+.home-cinematic .hero__cta {
+  background: var(--cin-amber);
+  color: #0a0c0f;
+  border: none;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
+}
+.home-cinematic .hero__cta:hover {
+  background: var(--cin-amber-bright);
+  transform: translateY(-2px);
+}
+
+/* Light shafts */
+.light-shafts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+.light-shafts__beam {
+  position: absolute;
+  top: -20%;
+  width: 12vw;
+  height: 140%;
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0) 80%);
+  transform: skewX(-14deg);
+  filter: blur(18px);
+  animation: beam-drift 14s ease-in-out infinite alternate;
+}
+.light-shafts__beam--a { left: 12%; animation-delay: 0s; }
+.light-shafts__beam--b { left: 48%; width: 8vw; opacity: 0.7; animation-delay: -5s; }
+.light-shafts__beam--c { left: 76%; width: 14vw; opacity: 0.45; animation-delay: -9s; }
+@keyframes beam-drift {
+  from { transform: skewX(-14deg) translateX(-2vw); opacity: 0.8; }
+  to   { transform: skewX(-14deg) translateX(3vw);  opacity: 1; }
+}
+
+/* Blueprint wireframe layer that "renders" on scroll */
+.blueprint-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.15) 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.15) 70%, transparent 100%);
+  opacity: 0;
+  transition: opacity 900ms ease-out;
+}
+.home-cinematic .hero.is-revealed .blueprint-grid { opacity: 1; }
+
+/* Parallax layers (foreground scaffold / midground / background) */
+.parallax-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+.parallax-layer--bg  { top: 0; bottom: 0; z-index: 0; opacity: 0.35; }
+.parallax-layer--mid { top: 10%; bottom: 0; z-index: 1; opacity: 0.55; }
+.parallax-layer--fg  { bottom: -5%; height: 35%; z-index: 2; opacity: 0.8; }
+
+.scaffold-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
+
+/* ---------- Section tone when cinematic ---------- */
+.home-cinematic .section {
+  background: transparent;
+  color: var(--cin-ink);
+}
+.home-cinematic .section--alt {
+  background: linear-gradient(180deg, rgba(17, 20, 26, 0.7) 0%, rgba(10, 12, 15, 0.9) 100%);
+}
+.home-cinematic .section__title {
+  font-family: var(--cin-heading);
+  letter-spacing: 0.04em;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  color: var(--cin-ink);
+}
+.home-cinematic .section__subtitle {
+  color: var(--cin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.85rem;
+}
+
+/* ---------- Stats (upgrade, preserve existing JS) ---------- */
+.home-cinematic .stats-section { position: relative; }
+.home-cinematic .stat-card {
+  background: rgba(17, 20, 26, 0.8);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-left: 3px solid var(--cin-amber);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  color: var(--cin-ink);
+}
+.home-cinematic .stat-card__icon {
+  color: var(--cin-amber);
+  background: rgba(245, 158, 11, 0.1);
+}
+.home-cinematic .stat-card__number,
+.home-cinematic .stat-card__suffix {
+  font-family: var(--cin-heading);
+  color: var(--cin-amber-bright);
+  font-size: 3.2rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 30px rgba(245, 158, 11, 0.35);
+}
+.home-cinematic .stat-card__label {
+  color: var(--cin-muted);
+}
+
+/* ---------- Feature cards: stagger reveal with amber border snap ---------- */
+.home-cinematic .feature-card {
+  background: rgba(17, 20, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 0 solid var(--cin-amber);
+  color: var(--cin-ink);
+  transition: border-left-width 380ms cubic-bezier(.2,.9,.25,1),
+              transform 500ms ease,
+              box-shadow 500ms ease,
+              opacity 600ms ease;
+}
+.home-cinematic .feature-card__title { color: var(--cin-ink); }
+.home-cinematic .feature-card__text  { color: var(--cin-muted); }
+.home-cinematic .feature-card__icon {
+  color: var(--cin-amber);
+  background: rgba(245, 158, 11, 0.08);
+}
+.home-cinematic .feature-card.is-revealed {
+  border-left-width: 5px;
+  box-shadow: -6px 12px 40px rgba(245, 158, 11, 0.12);
+}
+
+/* ---------- Tool cards tone ---------- */
+.home-cinematic .tool-card {
+  background: rgba(17, 20, 26, 0.85);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  color: var(--cin-ink);
+}
+.home-cinematic .tool-card__title { color: var(--cin-ink); }
+.home-cinematic .tool-card__text  { color: var(--cin-muted); }
+.home-cinematic .tool-card__cta   { color: var(--cin-amber); }
+
+/* ---------- Post cards alternating slide ---------- */
+.home-cinematic .post-card {
+  background: rgba(17, 20, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--cin-ink);
+}
+.home-cinematic .post-card__title a { color: var(--cin-ink); }
+.home-cinematic .post-card__title a:hover { color: var(--cin-amber); }
+.home-cinematic .post-card__excerpt { color: var(--cin-muted); }
+.home-cinematic .post-card__date { color: var(--cin-amber); }
+.home-cinematic .post-card__read-more { color: var(--cin-amber); }
+
+/* ---------- CTA ---------- */
+.home-cinematic .cta-section {
+  background: linear-gradient(135deg, #11141a 0%, #0a0c0f 100%);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+.home-cinematic .cta-section__title { font-family: var(--cin-heading); font-weight: 400; letter-spacing: 0.03em; color: var(--cin-ink); }
+.home-cinematic .cta-section__text  { color: var(--cin-muted); }
+.home-cinematic .cta-section__btn {
+  background: var(--cin-amber);
+  color: #0a0c0f;
+}
+.home-cinematic .cta-section__btn:hover { background: var(--cin-amber-bright); }
+
+/* ---------- Manifesto strip (the "Cada scroll salva una vida" banner) ---------- */
+.manifesto {
+  position: relative;
+  padding: 6rem 0;
+  text-align: center;
+  overflow: hidden;
+}
+.manifesto__kicker {
+  color: var(--cin-red);
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+.manifesto__title {
+  font-family: var(--cin-heading);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--cin-ink);
+}
+.manifesto__title em {
+  font-style: normal;
+  color: var(--cin-amber);
+}
+.manifesto__sub {
+  margin-top: 1.25rem;
+  color: var(--cin-muted);
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   Reveal animations (IntersectionObserver target classes)
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(.2,.9,.25,1);
+  will-change: opacity, transform;
+}
+.reveal--up    { transform: translateY(40px); }
+.reveal--left  { transform: translateX(-60px); }
+.reveal--right { transform: translateX(60px); }
+.reveal--zoom  { transform: scale(0.92); }
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger — each child inherits base style, delay via --i */
+.stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 650ms ease, transform 650ms cubic-bezier(.2,.9,.25,1);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.stagger.is-revealed > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================
+   Physics-based animations
+   ============================================================ */
+
+/* ---------- Hard hat that falls on the hero title ---------- */
+.hardhat-drop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 220px;
+  height: 184px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+  will-change: transform;
+  transform: translate(-50%, -140vh) rotate(-16deg);
+}
+.hardhat-drop.is-ready { opacity: 1; }
+.hardhat-drop svg { width: 100%; height: 100%; display: block; }
+
+@media (max-width: 640px) {
+  .hardhat-drop { width: 150px; height: 125px; }
+}
+
+/* Subtle impact flash under hat when it lands */
+.hardhat-impact {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 340px;
+  height: 60px;
+  transform: translate(-50%, 0) scale(0);
+  background: radial-gradient(ellipse, rgba(245, 158, 11, 0.6), rgba(245, 158, 11, 0.2) 40%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+}
+.hardhat-impact.is-flash {
+  animation: impact-flash 500ms ease-out forwards;
+}
+@keyframes impact-flash {
+  0%   { transform: translate(-50%, 0) scale(0.15); opacity: 1; }
+  40%  { transform: translate(-50%, 0) scale(1.1); opacity: 0.6; }
+  100% { transform: translate(-50%, 0) scale(1.6); opacity: 0; }
+}
+
+/* Dust particles burst on impact */
+.hardhat-dust {
+  position: absolute;
+  pointer-events: none;
+  z-index: 7;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.7);
+  opacity: 0;
+}
+.hardhat-dust.is-burst {
+  animation: dust-burst var(--dust-dur, 600ms) ease-out forwards;
+}
+@keyframes dust-burst {
+  0%   { opacity: 0.9; transform: translate(0, 0) scale(1); }
+  60%  { opacity: 0.5; }
+  100% { opacity: 0; transform: translate(var(--dx, 30px), var(--dy, -40px)) scale(0.2); }
+}
+
+/* Title shakes slightly on impact */
+@keyframes title-thud {
+  0%   { transform: translateY(0); }
+  15%  { transform: translateY(12px) scaleY(0.97); }
+  35%  { transform: translateY(-5px); }
+  55%  { transform: translateY(3px); }
+  75%  { transform: translateY(-1px); }
+  100% { transform: translateY(0); }
+}
+.hero__title.is-thud { animation: title-thud 600ms cubic-bezier(.2,.8,.2,1); }
+
+/* Gentle floating idle after landing */
+@keyframes hat-idle {
+  0%, 100% { transform: translate(-50%, 0) rotate(var(--hat-rest-rot, -6deg)); }
+  50%      { transform: translate(-50%, -3px) rotate(calc(var(--hat-rest-rot, -6deg) + 0.5deg)); }
+}
+.hardhat-drop.is-settled {
+  animation: hat-idle 4s ease-in-out infinite;
+}
+
+/* ---------- Warning tape that rolls out ---------- */
+.safety-scene {
+  position: relative;
+  margin: 2rem auto 0;
+  max-width: 900px;
+  height: 120px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.warning-tape {
+  position: relative;
+  flex: 1;
+  height: 28px;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1200ms cubic-bezier(.34, 1.2, .5, 1);
+  background: repeating-linear-gradient(
+    -45deg,
+    #f59e0b 0 22px,
+    #0a0c0f 22px 44px
+  );
+  border-top: 2px solid #111;
+  border-bottom: 2px solid #111;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+.warning-tape::before,
+.warning-tape::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  width: 14px;
+  height: 40px;
+  background: #1f2937;
+  border-radius: 2px;
+}
+.warning-tape::before { left: -4px; }
+.warning-tape::after  { right: -4px; }
+.safety-scene.is-live .warning-tape { transform: scaleX(1); }
+
+/* ---------- Safety cone that tips over ---------- */
+.cone {
+  width: 70px;
+  height: 90px;
+  transform-origin: 50% 100%;
+  transform: rotate(0deg);
+  transition: transform 900ms cubic-bezier(.5, 1.8, .4, 1);
+}
+.cone svg { width: 100%; height: 100%; display: block; }
+.safety-scene.is-live .cone { transform: rotate(78deg) translateX(6px); }
+
+/* ---------- Stats dropping in like blocks ---------- */
+.home-cinematic .stats-section .stat-card {
+  opacity: 0;
+  transform: translateY(-260px) rotate(-1deg);
+  transition: transform 900ms cubic-bezier(.3, 1.6, .4, 1),
+              opacity 200ms ease-out;
+  transition-delay: calc(var(--i, 0) * 120ms);
+}
+.home-cinematic .stats-section.is-dropped .stat-card {
+  opacity: 1;
+  transform: translateY(0) rotate(0);
+}
+/* Tiny shake after each block lands (adds weight) */
+@keyframes block-shake {
+  0%, 100% { transform: translateY(0); }
+  30%      { transform: translateY(4px); }
+  60%      { transform: translateY(-1px); }
+}
+.home-cinematic .stats-section.is-dropped .stat-card {
+  animation: block-shake 260ms ease-out;
+  animation-delay: calc(var(--i, 0) * 120ms + 900ms);
+}
+
+/* ---------- Harness snapping tight ---------- */
+.harness-scene {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  height: 180px;
+  margin: 2rem auto 0;
+}
+.harness-rope {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 4px;
+  height: 0;
+  background: linear-gradient(180deg, #92400e, #d97706 40%, #92400e);
+  transform: translateX(-50%);
+  transform-origin: top center;
+  transition: height 900ms cubic-bezier(.7, .05, .3, 1);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.25);
+}
+.harness-clip {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 34px;
+  height: 34px;
+  transform: translate(-50%, -50%);
+  border: 3px solid var(--cin-amber);
+  border-radius: 10px 10px 4px 4px;
+  background: #0a0c0f;
+}
+.harness-weight {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translate(-50%, 40px);
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(145deg, #374151, #111827);
+  border: 2px solid var(--cin-amber);
+  border-radius: 6px;
+  opacity: 0;
+  transition: transform 900ms cubic-bezier(.7, .05, .3, 1), opacity 200ms ease-out;
+}
+.harness-scene.is-snapped .harness-rope  { height: 120px; }
+.harness-scene.is-snapped .harness-weight { opacity: 1; transform: translate(-50%, 0); }
+.harness-scene.is-snapped .harness-rope   { animation: rope-twang 480ms ease-out 900ms; }
+@keyframes rope-twang {
+  0%   { transform: translateX(-50%) scaleX(1); }
+  30%  { transform: translateX(-50%) scaleX(1.6); }
+  60%  { transform: translateX(-50%) scaleX(0.8); }
+  100% { transform: translateX(-50%) scaleX(1); }
+}
+
+/* ---------- Worker pulled back from the ledge ---------- */
+.ledge-scene {
+  position: relative;
+  height: 220px;
+  max-width: 720px;
+  margin: 2rem auto 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(17, 20, 26, 0.9) 60%);
+  overflow: hidden;
+  border-top: 1px solid rgba(245, 158, 11, 0.15);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.15);
+}
+.ledge-scene__ground {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 55%;
+  height: 40%;
+  background:
+    repeating-linear-gradient(90deg, #1f2937 0 18px, #111827 18px 19px),
+    #1f2937;
+  border-right: 3px dashed var(--cin-red);
+}
+.ledge-scene__fall {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 45%;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.05), transparent);
+}
+.ledge-worker {
+  position: absolute;
+  bottom: 40%;
+  left: 52%;
+  width: 44px;
+  height: 70px;
+  transform-origin: bottom center;
+  transform: translateX(0);
+  transition: transform 1100ms cubic-bezier(.7, -0.3, .3, 1.4);
+  z-index: 2;
+}
+.ledge-scene.is-rescued .ledge-worker {
+  transform: translateX(-120px);
+}
+.ledge-rope {
+  position: absolute;
+  bottom: 55%;
+  left: 52%;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #92400e, var(--cin-amber));
+  transform-origin: left center;
+  transition: width 400ms ease-out, transform 1100ms cubic-bezier(.7, -0.3, .3, 1.4);
+  z-index: 1;
+}
+.ledge-scene.is-rescued .ledge-rope {
+  width: 120px;
+  transform: translateX(-120px);
+}
+
+/* ---------- Post cards falling and stacking ---------- */
+.home-cinematic .post-grid {
+  perspective: 1400px;
+}
+.home-cinematic .post-card {
+  opacity: 0;
+  transform: translateY(-340px) rotate(var(--stack-rot, 0deg));
+  transition: transform 1000ms cubic-bezier(.3, 1.4, .45, 1),
+              opacity 200ms ease-out;
+  transition-delay: calc(var(--stack-i, 0) * 140ms);
+}
+.home-cinematic .post-card.is-stacked {
+  opacity: 1;
+  transform: translateY(0) rotate(var(--stack-rest, 0deg));
+}
+/* Override the earlier slide reveal for post cards (physics takes over) */
+.home-cinematic .post-card.reveal { opacity: 0; }
+.home-cinematic .post-card.reveal.is-stacked { opacity: 1; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .stagger > *,
+  .light-shafts__beam,
+  .parallax-layer,
+  .blueprint-grid,
+  .feature-card {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .dust-canvas { display: none; }
+  .hardhat-drop,
+  .warning-tape,
+  .cone,
+  .harness-rope,
+  .harness-weight,
+  .ledge-worker,
+  .ledge-rope,
+  .home-cinematic .stats-section .stat-card,
+  .home-cinematic .post-card {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

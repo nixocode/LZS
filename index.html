@@ -38,8 +38,7 @@ title: "La Zona Segura — Tu referencia en seguridad industrial"
     <span class="light-shafts__beam light-shafts__beam--c"></span>
   </div>
 
-  <div class="hardhat-impact" aria-hidden="true"></div>
-  <div class="hardhat-drop" aria-hidden="true">
+  <div class="hardhat" id="hardhat" aria-hidden="true">
     <svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <!-- Main shell gradient — warm yellow with depth -->
@@ -188,6 +187,70 @@ title: "La Zona Segura — Tu referencia en seguridad industrial"
       </g>
     </svg>
   </div>
+
+  <style>
+    .hardhat {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 200px;
+      height: 167px;
+      z-index: 10;
+      pointer-events: none;
+      transform: translate(-50%, -300px) rotate(-15deg);
+      animation: hat-fall 0.8s cubic-bezier(.22,.68,.36,1.2) 0.6s forwards;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+    }
+    .hardhat svg { width: 100%; height: 100%; }
+    @keyframes hat-fall {
+      0%   { transform: translate(-50%, -300px) rotate(-15deg); opacity: 1; }
+      65%  { transform: translate(-50%, var(--hat-land)) rotate(2deg); }
+      80%  { transform: translate(-50%, calc(var(--hat-land) - 8px)) rotate(-1deg); }
+      100% { transform: translate(-50%, var(--hat-land)) rotate(-4deg); }
+    }
+    .hardhat.is-gone {
+      transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+      opacity: 0 !important;
+      transform: translate(-50%, calc(var(--hat-land) - 30px)) rotate(-8deg) !important;
+      animation: none;
+    }
+    @media (max-width: 640px) {
+      .hardhat { width: 140px; height: 117px; }
+    }
+    @media (max-width: 480px) {
+      .hardhat { width: 110px; height: 92px; }
+    }
+  </style>
+
+  <script>
+  (function() {
+    var hat = document.getElementById('hardhat');
+    var title = document.querySelector('.hero__title');
+    if (!hat || !title) return;
+
+    // Position hat so brim lands on top of the title
+    function placeHat() {
+      var hero = hat.parentElement;
+      var tRect = title.getBoundingClientRect();
+      var hRect = hero.getBoundingClientRect();
+      var landY = (tRect.top - hRect.top) - hat.offsetHeight * 0.72;
+      if (landY < 5) landY = 5;
+      hat.style.setProperty('--hat-land', landY + 'px');
+    }
+    placeHat();
+    window.addEventListener('resize', placeHat);
+
+    // Fade out when user scrolls past hero
+    var gone = false;
+    window.addEventListener('scroll', function() {
+      if (gone) return;
+      if (window.scrollY > window.innerHeight * 0.5) {
+        hat.classList.add('is-gone');
+        gone = true;
+      }
+    }, { passive: true });
+  })();
+  </script>
 
   <div class="container hero__content reveal reveal--up">
     <h1 class="hero__title">La Zona Segura</h1>

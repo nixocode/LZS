@@ -38,219 +38,384 @@ title: "La Zona Segura — Tu referencia en seguridad industrial"
     <span class="light-shafts__beam light-shafts__beam--c"></span>
   </div>
 
-  <div class="hardhat" id="hardhat" aria-hidden="true">
-    <svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- Main shell gradient — warm yellow with depth -->
-        <linearGradient id="hatShell" x1="0.2" y1="0" x2="0.8" y2="1">
-          <stop offset="0"    stop-color="#fef9c3"/>
-          <stop offset="0.18" stop-color="#fde047"/>
-          <stop offset="0.5"  stop-color="#f59e0b"/>
-          <stop offset="0.82" stop-color="#d97706"/>
-          <stop offset="1"    stop-color="#92400e"/>
-        </linearGradient>
-        <!-- Side shadow for 3D curvature -->
-        <radialGradient id="shellShadow" cx="0.5" cy="0.4" r="0.6">
-          <stop offset="0"   stop-color="transparent"/>
-          <stop offset="0.7" stop-color="transparent"/>
-          <stop offset="1"   stop-color="rgba(120,53,15,0.35)"/>
-        </radialGradient>
-        <!-- Top highlight -->
-        <radialGradient id="shellHighlight" cx="0.38" cy="0.25" r="0.45">
-          <stop offset="0"   stop-color="rgba(254,249,195,0.7)"/>
-          <stop offset="0.5" stop-color="rgba(253,224,71,0.2)"/>
-          <stop offset="1"   stop-color="transparent"/>
-        </radialGradient>
-        <!-- Brim gradient -->
-        <linearGradient id="hatBrim" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0"   stop-color="#eab308"/>
-          <stop offset="0.4" stop-color="#ca8a04"/>
-          <stop offset="1"   stop-color="#78350f"/>
-        </linearGradient>
-        <!-- Brim underside -->
-        <linearGradient id="brimUnder" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0"   stop-color="#78350f"/>
-          <stop offset="1"   stop-color="#451a03"/>
-        </linearGradient>
-        <!-- Inner lining -->
-        <linearGradient id="innerLining" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0"   stop-color="#1c1917"/>
-          <stop offset="1"   stop-color="#0c0a09"/>
-        </linearGradient>
-        <!-- Reflective strip -->
-        <linearGradient id="reflectiveStrip" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0"    stop-color="rgba(255,255,255,0.15)"/>
-          <stop offset="0.3"  stop-color="rgba(255,255,255,0.85)"/>
-          <stop offset="0.5"  stop-color="rgba(255,255,255,0.95)"/>
-          <stop offset="0.7"  stop-color="rgba(255,255,255,0.85)"/>
-          <stop offset="1"    stop-color="rgba(255,255,255,0.15)"/>
-        </linearGradient>
-        <!-- Drop shadow filter -->
-        <filter id="hatShadow" x="-10%" y="-5%" width="120%" height="130%">
-          <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.45"/>
-        </filter>
-      </defs>
-
-      <g filter="url(#hatShadow)">
-        <!-- Brim underside (visible from slight angle) -->
-        <ellipse cx="120" cy="148" rx="105" ry="18" fill="url(#brimUnder)"/>
-
-        <!-- Inner lining visible at brim opening -->
-        <ellipse cx="120" cy="142" rx="80" ry="12" fill="url(#innerLining)"/>
-        <ellipse cx="120" cy="141" rx="74" ry="9" fill="#292524" opacity="0.7"/>
-
-        <!-- Main shell -->
-        <path d="M28 140 C28 68 60 38 120 28 C180 38 212 68 212 140 Z"
-              fill="url(#hatShell)" stroke="#78350f" stroke-width="1.5"/>
-
-        <!-- 3D curvature shadow overlay -->
-        <path d="M28 140 C28 68 60 38 120 28 C180 38 212 68 212 140 Z"
-              fill="url(#shellShadow)"/>
-
-        <!-- Top highlight for realism -->
-        <path d="M28 140 C28 68 60 38 120 28 C180 38 212 68 212 140 Z"
-              fill="url(#shellHighlight)"/>
-
-        <!-- Central ridge (keel) -->
-        <path d="M120 28 C120 50 120 100 120 140" stroke="#92400e" stroke-width="3.5"
-              fill="none" opacity="0.5" stroke-linecap="round"/>
-        <!-- Ridge highlight -->
-        <path d="M118 32 C118 52 118 98 118 138" stroke="#fef3c7" stroke-width="1.2"
-              fill="none" opacity="0.35" stroke-linecap="round"/>
-
-        <!-- Lateral ridges -->
-        <path d="M56 52 Q88 40 120 36 Q152 40 184 52" stroke="#92400e" stroke-width="2"
-              fill="none" opacity="0.35"/>
-        <path d="M56 52 Q88 41 120 37 Q152 41 184 52" stroke="#fef3c7" stroke-width="0.8"
-              fill="none" opacity="0.25"/>
-
-        <!-- Ventilation slots (4 pairs) -->
-        <g opacity="0.5">
-          <ellipse cx="80" cy="60" rx="6" ry="2.5" fill="#78350f" transform="rotate(-12 80 60)"/>
-          <ellipse cx="80" cy="60" rx="4.5" ry="1.5" fill="#451a03" transform="rotate(-12 80 60)"/>
-          <ellipse cx="100" cy="54" rx="6" ry="2.5" fill="#78350f" transform="rotate(-4 100 54)"/>
-          <ellipse cx="100" cy="54" rx="4.5" ry="1.5" fill="#451a03" transform="rotate(-4 100 54)"/>
-          <ellipse cx="140" cy="54" rx="6" ry="2.5" fill="#78350f" transform="rotate(4 140 54)"/>
-          <ellipse cx="140" cy="54" rx="4.5" ry="1.5" fill="#451a03" transform="rotate(4 140 54)"/>
-          <ellipse cx="160" cy="60" rx="6" ry="2.5" fill="#78350f" transform="rotate(12 160 60)"/>
-          <ellipse cx="160" cy="60" rx="4.5" ry="1.5" fill="#451a03" transform="rotate(12 160 60)"/>
+  <!-- 3D Hard Hat Scene -->
+  <div class="hat-scene" aria-hidden="true">
+    <div class="hat-shadow" id="hat-shadow"></div>
+    <div class="hardhat hardhat--3d" id="hardhat">
+      <svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="hatShell" x1="0.2" y1="0" x2="0.8" y2="1">
+            <stop offset="0"    stop-color="#fef9c3"/>
+            <stop offset="0.18" stop-color="#fde047"/>
+            <stop offset="0.5"  stop-color="#f59e0b"/>
+            <stop offset="0.82" stop-color="#d97706"/>
+            <stop offset="1"    stop-color="#92400e"/>
+          </linearGradient>
+          <radialGradient id="shellShadow" cx="0.5" cy="0.4" r="0.6">
+            <stop offset="0"   stop-color="transparent"/>
+            <stop offset="0.7" stop-color="transparent"/>
+            <stop offset="1"   stop-color="rgba(120,53,15,0.35)"/>
+          </radialGradient>
+          <radialGradient id="shellHighlight" cx="0.38" cy="0.25" r="0.45">
+            <stop offset="0"   stop-color="rgba(254,249,195,0.7)"/>
+            <stop offset="0.5" stop-color="rgba(253,224,71,0.2)"/>
+            <stop offset="1"   stop-color="transparent"/>
+          </radialGradient>
+          <linearGradient id="hatBrim" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#eab308"/>
+            <stop offset="0.4" stop-color="#ca8a04"/>
+            <stop offset="1"   stop-color="#78350f"/>
+          </linearGradient>
+          <linearGradient id="brimUnder" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#78350f"/>
+            <stop offset="1"   stop-color="#451a03"/>
+          </linearGradient>
+          <linearGradient id="innerLining" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#1c1917"/>
+            <stop offset="1"   stop-color="#0c0a09"/>
+          </linearGradient>
+          <linearGradient id="reflectiveStrip" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"    stop-color="rgba(255,255,255,0.15)"/>
+            <stop offset="0.3"  stop-color="rgba(255,255,255,0.85)"/>
+            <stop offset="0.5"  stop-color="rgba(255,255,255,0.95)"/>
+            <stop offset="0.7"  stop-color="rgba(255,255,255,0.85)"/>
+            <stop offset="1"    stop-color="rgba(255,255,255,0.15)"/>
+          </linearGradient>
+          <filter id="hatShadow" x="-10%" y="-5%" width="120%" height="130%">
+            <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.45"/>
+          </filter>
+        </defs>
+        <g filter="url(#hatShadow)">
+          <ellipse cx="120" cy="148" rx="105" ry="18" fill="url(#brimUnder)"/>
+          <ellipse cx="120" cy="142" rx="80" ry="12" fill="url(#innerLining)"/>
+          <ellipse cx="120" cy="141" rx="74" ry="9" fill="#292524" opacity="0.7"/>
+          <path d="M28 140 C28 68 60 38 120 28 C180 38 212 68 212 140 Z"
+                fill="url(#hatShell)" stroke="#78350f" stroke-width="1.5"/>
+          <path d="M28 140 C28 68 60 38 120 28 C180 38 212 68 212 140 Z"
+                fill="url(#shellShadow)"/>
+          <path d="M28 140 C28 68 60 38 120 28 C180 38 212 68 212 140 Z"
+                fill="url(#shellHighlight)"/>
+          <path d="M120 28 C120 50 120 100 120 140" stroke="#92400e" stroke-width="3.5"
+                fill="none" opacity="0.5" stroke-linecap="round"/>
+          <path d="M118 32 C118 52 118 98 118 138" stroke="#fef3c7" stroke-width="1.2"
+                fill="none" opacity="0.35" stroke-linecap="round"/>
+          <path d="M56 52 Q88 40 120 36 Q152 40 184 52" stroke="#92400e" stroke-width="2"
+                fill="none" opacity="0.35"/>
+          <path d="M56 52 Q88 41 120 37 Q152 41 184 52" stroke="#fef3c7" stroke-width="0.8"
+                fill="none" opacity="0.25"/>
+          <g opacity="0.5">
+            <ellipse cx="80" cy="60" rx="6" ry="2.5" fill="#78350f" transform="rotate(-12 80 60)"/>
+            <ellipse cx="80" cy="60" rx="4.5" ry="1.5" fill="#451a03" transform="rotate(-12 80 60)"/>
+            <ellipse cx="100" cy="54" rx="6" ry="2.5" fill="#78350f" transform="rotate(-4 100 54)"/>
+            <ellipse cx="100" cy="54" rx="4.5" ry="1.5" fill="#451a03" transform="rotate(-4 100 54)"/>
+            <ellipse cx="140" cy="54" rx="6" ry="2.5" fill="#78350f" transform="rotate(4 140 54)"/>
+            <ellipse cx="140" cy="54" rx="4.5" ry="1.5" fill="#451a03" transform="rotate(4 140 54)"/>
+            <ellipse cx="160" cy="60" rx="6" ry="2.5" fill="#78350f" transform="rotate(12 160 60)"/>
+            <ellipse cx="160" cy="60" rx="4.5" ry="1.5" fill="#451a03" transform="rotate(12 160 60)"/>
+          </g>
+          <path d="M44 108 Q82 96 120 94 Q158 96 196 108"
+                stroke="url(#reflectiveStrip)" stroke-width="6" fill="none"
+                stroke-linecap="round" opacity="0.85"/>
+          <path d="M44 105 Q82 93 120 91 Q158 93 196 105"
+                stroke="#d97706" stroke-width="0.6" fill="none" opacity="0.4"/>
+          <path d="M44 111 Q82 99 120 97 Q158 99 196 111"
+                stroke="#d97706" stroke-width="0.6" fill="none" opacity="0.4"/>
+          <g opacity="0.7">
+            <circle cx="62" cy="86" r="3.5" fill="#92400e"/>
+            <circle cx="62" cy="86" r="2" fill="#b45309"/>
+            <circle cx="62" cy="86" r="0.8" fill="#d97706"/>
+            <circle cx="120" cy="78" r="3.5" fill="#92400e"/>
+            <circle cx="120" cy="78" r="2" fill="#b45309"/>
+            <circle cx="120" cy="78" r="0.8" fill="#d97706"/>
+            <circle cx="178" cy="86" r="3.5" fill="#92400e"/>
+            <circle cx="178" cy="86" r="2" fill="#b45309"/>
+            <circle cx="178" cy="86" r="0.8" fill="#d97706"/>
+          </g>
+          <ellipse cx="120" cy="140" rx="105" ry="16" fill="url(#hatBrim)"
+                   stroke="#78350f" stroke-width="1.2"/>
+          <path d="M30 138 Q75 126 120 124 Q165 126 210 138"
+                stroke="#fde047" stroke-width="1.5" fill="none" opacity="0.35"/>
+          <g transform="translate(120, 130)">
+            <rect x="-10" y="-4" width="20" height="8" rx="3" fill="#78350f" stroke="#451a03" stroke-width="0.8"/>
+            <rect x="-7" y="-2" width="14" height="4" rx="1.5" fill="#92400e"/>
+            <line x1="-4" y1="-1" x2="-4" y2="1" stroke="#b45309" stroke-width="0.8"/>
+            <line x1="0" y1="-1" x2="0" y2="1" stroke="#b45309" stroke-width="0.8"/>
+            <line x1="4" y1="-1" x2="4" y2="1" stroke="#b45309" stroke-width="0.8"/>
+          </g>
+          <path d="M58 62 Q72 46 100 40 Q110 38 115 38"
+                stroke="#fefce8" stroke-width="5" fill="none" opacity="0.45"
+                stroke-linecap="round"/>
+          <path d="M64 74 Q76 64 90 58"
+                stroke="#fef9c3" stroke-width="3" fill="none" opacity="0.3"
+                stroke-linecap="round"/>
         </g>
-
-        <!-- Reflective safety strip -->
-        <path d="M44 108 Q82 96 120 94 Q158 96 196 108"
-              stroke="url(#reflectiveStrip)" stroke-width="6" fill="none"
-              stroke-linecap="round" opacity="0.85"/>
-        <!-- Strip edge lines -->
-        <path d="M44 105 Q82 93 120 91 Q158 93 196 105"
-              stroke="#d97706" stroke-width="0.6" fill="none" opacity="0.4"/>
-        <path d="M44 111 Q82 99 120 97 Q158 99 196 111"
-              stroke="#d97706" stroke-width="0.6" fill="none" opacity="0.4"/>
-
-        <!-- Rivet details -->
-        <g opacity="0.7">
-          <circle cx="62" cy="86" r="3.5" fill="#92400e"/>
-          <circle cx="62" cy="86" r="2" fill="#b45309"/>
-          <circle cx="62" cy="86" r="0.8" fill="#d97706"/>
-          <circle cx="120" cy="78" r="3.5" fill="#92400e"/>
-          <circle cx="120" cy="78" r="2" fill="#b45309"/>
-          <circle cx="120" cy="78" r="0.8" fill="#d97706"/>
-          <circle cx="178" cy="86" r="3.5" fill="#92400e"/>
-          <circle cx="178" cy="86" r="2" fill="#b45309"/>
-          <circle cx="178" cy="86" r="0.8" fill="#d97706"/>
-        </g>
-
-        <!-- Brim top surface -->
-        <ellipse cx="120" cy="140" rx="105" ry="16" fill="url(#hatBrim)"
-                 stroke="#78350f" stroke-width="1.2"/>
-
-        <!-- Brim highlight arc -->
-        <path d="M30 138 Q75 126 120 124 Q165 126 210 138"
-              stroke="#fde047" stroke-width="1.5" fill="none" opacity="0.35"/>
-
-        <!-- Adjustment ratchet knob (back of hat) -->
-        <g transform="translate(120, 130)">
-          <rect x="-10" y="-4" width="20" height="8" rx="3" fill="#78350f" stroke="#451a03" stroke-width="0.8"/>
-          <rect x="-7" y="-2" width="14" height="4" rx="1.5" fill="#92400e"/>
-          <line x1="-4" y1="-1" x2="-4" y2="1" stroke="#b45309" stroke-width="0.8"/>
-          <line x1="0" y1="-1" x2="0" y2="1" stroke="#b45309" stroke-width="0.8"/>
-          <line x1="4" y1="-1" x2="4" y2="1" stroke="#b45309" stroke-width="0.8"/>
-        </g>
-
-        <!-- Primary specular highlight (top-left) -->
-        <path d="M58 62 Q72 46 100 40 Q110 38 115 38"
-              stroke="#fefce8" stroke-width="5" fill="none" opacity="0.45"
-              stroke-linecap="round"/>
-        <!-- Secondary smaller highlight -->
-        <path d="M64 74 Q76 64 90 58"
-              stroke="#fef9c3" stroke-width="3" fill="none" opacity="0.3"
-              stroke-linecap="round"/>
-      </g>
-    </svg>
+      </svg>
+    </div>
+    <div class="hat-impact" id="hat-impact">
+      <span class="hat-spark"></span>
+      <span class="hat-spark"></span>
+      <span class="hat-spark"></span>
+      <span class="hat-spark"></span>
+      <span class="hat-spark"></span>
+      <span class="hat-spark"></span>
+      <span class="hat-dust"></span>
+      <span class="hat-dust"></span>
+      <span class="hat-dust"></span>
+      <span class="hat-dust"></span>
+    </div>
   </div>
+  <!-- Future: scroll-triggered bricks land here -->
+  <div id="brick-zone" class="brick-zone" aria-hidden="true"></div>
 
   <style>
-    .hardhat {
+    /* --- 3D Hat Scene --- */
+    .hat-scene {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      perspective: 900px;
+      perspective-origin: 50% 40%;
+    }
+    .brick-zone {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    /* --- Hard Hat 3D Element --- */
+    .hardhat--3d {
       position: absolute;
       left: 50%;
       top: 0;
-      width: 200px;
-      height: 167px;
+      width: clamp(110px, 18vw, 220px);
+      aspect-ratio: 240 / 200;
       z-index: 10;
       pointer-events: none;
-      transform: translate(-50%, -300px) rotate(-15deg);
-      animation: hat-fall 0.8s cubic-bezier(.22,.68,.36,1.2) 0.6s forwards;
-      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+      transform-style: preserve-3d;
+      transform-origin: 50% 80%;
+      will-change: transform, opacity;
+      transform:
+        translate(-50%, var(--hat-start, -350px))
+        scale(0.4)
+        rotateX(-25deg) rotateY(180deg) rotateZ(-20deg);
+      opacity: 0;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+      animation: hat-fall-3d 1.8s cubic-bezier(.23,.72,.32,1) 0.6s forwards;
     }
-    .hardhat svg { width: 100%; height: 100%; }
-    @keyframes hat-fall {
-      0%   { transform: translate(-50%, -300px) rotate(-15deg); opacity: 1; }
-      65%  { transform: translate(-50%, var(--hat-land)) rotate(2deg); }
-      80%  { transform: translate(-50%, calc(var(--hat-land) - 8px)) rotate(-1deg); }
-      100% { transform: translate(-50%, var(--hat-land)) rotate(-4deg); }
+    .hardhat--3d svg { width: 100%; height: 100%; display: block; }
+
+    /* --- 7-Phase 3D Fall Keyframe --- */
+    @keyframes hat-fall-3d {
+      0% {
+        transform:
+          translate(-50%, var(--hat-start, -350px))
+          scale(0.4)
+          rotateX(-25deg) rotateY(180deg) rotateZ(-20deg);
+        opacity: 0;
+        filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+      }
+      8% { opacity: 1; }
+      40% {
+        transform:
+          translate(-50%, calc(var(--hat-land) * 0.5))
+          scale(0.75)
+          rotateX(-10deg) rotateY(40deg) rotateZ(-8deg);
+        filter: drop-shadow(0 12px 30px rgba(0,0,0,0.4));
+      }
+      62% {
+        transform:
+          translate(-50%, calc(var(--hat-land) + 6px))
+          scale(1.05)
+          rotateX(8deg) rotateY(-5deg) rotateZ(3deg);
+        filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+      }
+      72% {
+        transform:
+          translate(-50%, calc(var(--hat-land) - 12px))
+          scale(0.97)
+          rotateX(-3deg) rotateY(2deg) rotateZ(-5deg);
+        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.45));
+      }
+      85% {
+        transform:
+          translate(-50%, calc(var(--hat-land) + 2px))
+          scale(1.01)
+          rotateX(2deg) rotateY(-1deg) rotateZ(4deg);
+      }
+      100% {
+        transform:
+          translate(-50%, var(--hat-land))
+          scale(1)
+          rotateX(6deg) rotateY(-4deg) rotateZ(-6deg);
+        opacity: 1;
+        filter: drop-shadow(0 6px 18px rgba(0,0,0,0.5));
+      }
     }
-    .hardhat.is-gone {
-      transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+    /* --- Idle breathing after landing --- */
+    .hardhat--3d.is-landed {
+      opacity: 1;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,0.5));
+      animation: hat-idle 6s ease-in-out infinite;
+    }
+    @keyframes hat-idle {
+      0%, 100% {
+        transform:
+          translate(-50%, var(--hat-land))
+          scale(1)
+          rotateX(6deg) rotateY(-4deg) rotateZ(-6deg);
+      }
+      50% {
+        transform:
+          translate(-50%, calc(var(--hat-land) - 2px))
+          scale(1)
+          rotateX(5deg) rotateY(-3deg) rotateZ(-5.5deg);
+      }
+    }
+
+    /* --- Growing shadow on title surface --- */
+    .hat-shadow {
+      position: absolute;
+      left: 50%;
+      width: 0; height: 0;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.45) 0%, transparent 70%);
+      transform: translate(-50%, 0);
+      pointer-events: none;
+      z-index: 9;
+      opacity: 0;
+    }
+    .hat-shadow.is-active {
+      animation: shadow-grow 1.8s cubic-bezier(.23,.72,.32,1) 0.6s forwards;
+    }
+    @keyframes shadow-grow {
+      0%   { width: 30px; height: 8px; opacity: 0; }
+      40%  { width: 80px; height: 16px; opacity: 0.25; }
+      62%  { width: 160px; height: 22px; opacity: 0.55; }
+      72%  { width: 130px; height: 18px; opacity: 0.4; }
+      100% { width: 140px; height: 20px; opacity: 0.45; }
+    }
+
+    /* --- Impact sparks --- */
+    .hat-impact {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      pointer-events: none;
+      z-index: 11;
+    }
+    .hat-spark {
+      position: absolute;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 6px 2px rgba(251, 191, 36, 0.6);
+      opacity: 0;
+    }
+    .hat-impact.is-fired .hat-spark {
+      animation: spark-fly 0.6s ease-out forwards;
+    }
+    .hat-spark:nth-child(1) { --sx: -40px; --sy: -20px; }
+    .hat-spark:nth-child(2) { --sx: 35px;  --sy: -25px; animation-delay: 20ms; }
+    .hat-spark:nth-child(3) { --sx: -55px; --sy: -8px;  animation-delay: 40ms; }
+    .hat-spark:nth-child(4) { --sx: 50px;  --sy: -12px; animation-delay: 30ms; }
+    .hat-spark:nth-child(5) { --sx: -20px; --sy: -30px; animation-delay: 50ms; }
+    .hat-spark:nth-child(6) { --sx: 25px;  --sy: -5px;  animation-delay: 10ms; }
+    @keyframes spark-fly {
+      0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--sx), var(--sy)) scale(0); opacity: 0; }
+    }
+
+    /* --- Impact dust puffs --- */
+    .hat-dust {
+      position: absolute;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,158,11,0.25) 0%, transparent 70%);
+      opacity: 0;
+    }
+    .hat-impact.is-fired .hat-dust {
+      animation: dust-puff 0.8s ease-out forwards;
+    }
+    .hat-dust:nth-child(7)  { --dx: -50px; --dy: 5px; }
+    .hat-dust:nth-child(8)  { --dx: 45px;  --dy: 8px; }
+    .hat-dust:nth-child(9)  { --dx: -25px; --dy: -5px; animation-delay: 60ms; }
+    .hat-dust:nth-child(10) { --dx: 30px;  --dy: -3px; animation-delay: 80ms; }
+    @keyframes dust-puff {
+      0%   { transform: translate(0, 0) scale(0.5); opacity: 0.7; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(3); opacity: 0; }
+    }
+
+    /* --- Title glow on impact --- */
+    .hero__title.hat-glow {
+      text-shadow:
+        0 2px 40px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(245, 158, 11, 0.4),
+        0 0 60px rgba(245, 158, 11, 0.2);
+      transition: text-shadow 0.3s ease-out;
+    }
+    .hero__title.hat-glow--fade {
+      text-shadow: 0 2px 40px rgba(0, 0, 0, 0.8);
+      transition: text-shadow 0.8s ease-out;
+    }
+
+    /* --- 3D scroll fade-out --- */
+    .hardhat--3d.is-gone {
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
       opacity: 0 !important;
-      transform: translate(-50%, calc(var(--hat-land) - 30px)) rotate(-8deg) !important;
-      animation: none;
+      transform:
+        translate(-50%, calc(var(--hat-land) - 40px))
+        scale(0.9)
+        rotateX(-10deg) rotateY(15deg) rotateZ(-12deg) !important;
+      animation: none !important;
     }
+    .hat-shadow.is-gone,
+    .hat-impact.is-gone {
+      transition: opacity 0.4s ease-out;
+      opacity: 0 !important;
+    }
+
+    /* --- Responsive --- */
     @media (max-width: 640px) {
-      .hardhat { width: 140px; height: 117px; }
+      .hat-scene { perspective: 600px; }
+      .hat-shadow.is-active { animation-name: shadow-grow-sm; }
+      @keyframes shadow-grow-sm {
+        0%   { width: 20px; height: 6px; opacity: 0; }
+        62%  { width: 100px; height: 14px; opacity: 0.5; }
+        100% { width: 90px; height: 12px; opacity: 0.4; }
+      }
+      .hat-spark { width: 3px; height: 3px; }
+      .hat-dust { width: 14px; height: 14px; }
     }
     @media (max-width: 480px) {
-      .hardhat { width: 110px; height: 92px; }
+      .hat-scene { perspective: 500px; }
+      .hat-spark:nth-child(n+5),
+      .hat-dust:nth-child(n+9) { display: none; }
+    }
+
+    /* --- Reduced motion --- */
+    @media (prefers-reduced-motion: reduce) {
+      .hardhat--3d {
+        animation: none !important;
+        transform: translate(-50%, var(--hat-land)) scale(1) rotateZ(-6deg) !important;
+        opacity: 1 !important;
+      }
+      .hardhat--3d.is-landed { animation: none !important; }
+      .hat-shadow {
+        animation: none !important;
+        opacity: 0.4 !important;
+        width: 140px !important;
+        height: 20px !important;
+      }
+      .hat-impact { display: none; }
+      .hardhat--3d.is-gone {
+        transition: opacity 0.3s ease-out !important;
+        transform: translate(-50%, var(--hat-land)) scale(1) rotateZ(-6deg) !important;
+      }
     }
   </style>
-
-  <script>
-  (function() {
-    var hat = document.getElementById('hardhat');
-    var title = document.querySelector('.hero__title');
-    if (!hat || !title) return;
-
-    // Position hat so brim lands on top of the title
-    function placeHat() {
-      var hero = hat.parentElement;
-      var tRect = title.getBoundingClientRect();
-      var hRect = hero.getBoundingClientRect();
-      var landY = (tRect.top - hRect.top) - hat.offsetHeight * 0.72;
-      if (landY < 5) landY = 5;
-      hat.style.setProperty('--hat-land', landY + 'px');
-    }
-    placeHat();
-    window.addEventListener('resize', placeHat);
-
-    // Fade out when user scrolls past hero
-    var gone = false;
-    window.addEventListener('scroll', function() {
-      if (gone) return;
-      if (window.scrollY > window.innerHeight * 0.5) {
-        hat.classList.add('is-gone');
-        gone = true;
-      }
-    }, { passive: true });
-  })();
-  </script>
 
   <div class="container hero__content reveal reveal--up">
     <h1 class="hero__title">La Zona Segura</h1>
@@ -264,6 +429,89 @@ title: "La Zona Segura — Tu referencia en seguridad industrial"
       Explorar artículos →
     </a>
   </div>
+
+  <script>
+  (function() {
+    'use strict';
+    var hat = document.getElementById('hardhat');
+    var shadow = document.getElementById('hat-shadow');
+    var impact = document.getElementById('hat-impact');
+    var title = document.querySelector('.hero__title');
+    if (!hat || !title) return;
+
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ANIM_DELAY = 600;   // matches CSS animation-delay
+    var ANIM_DUR = 1800;    // matches CSS animation duration
+    var IMPACT_AT = 0.62;   // keyframe percentage where hat hits
+
+    // Position hat, shadow, and impact so brim lands on top of the title
+    function placeHat() {
+      var hero = hat.closest('.hero') || hat.parentElement.parentElement;
+      var tRect = title.getBoundingClientRect();
+      var hRect = hero.getBoundingClientRect();
+      var hatH = hat.offsetHeight || 167;
+      var landY = (tRect.top - hRect.top) - hatH * 0.88;
+      if (landY < 5) landY = 5;
+
+      hat.style.setProperty('--hat-land', landY + 'px');
+      hat.style.setProperty('--hat-start', '-350px');
+
+      if (shadow) shadow.style.top = (tRect.top - hRect.top - 4) + 'px';
+      if (impact) impact.style.top = (tRect.top - hRect.top - 10) + 'px';
+    }
+
+    placeHat();
+    window.addEventListener('resize', placeHat);
+
+    // Activate shadow animation
+    if (shadow && !prefersReduced) {
+      shadow.classList.add('is-active');
+    }
+
+    if (!prefersReduced) {
+      // Fire sparks and glow at impact moment
+      var impactTime = ANIM_DELAY + (ANIM_DUR * IMPACT_AT);
+      setTimeout(function() {
+        if (impact) impact.classList.add('is-fired');
+        if (title) {
+          title.classList.add('hat-glow');
+          setTimeout(function() {
+            title.classList.remove('hat-glow');
+            title.classList.add('hat-glow--fade');
+            setTimeout(function() {
+              title.classList.remove('hat-glow--fade');
+            }, 800);
+          }, 300);
+        }
+      }, impactTime);
+
+      // Switch to idle breathing after main animation completes
+      setTimeout(function() {
+        hat.classList.add('is-landed');
+      }, ANIM_DELAY + ANIM_DUR + 50);
+    } else {
+      // Reduced motion: show hat in final position instantly
+      hat.classList.add('is-landed');
+      if (shadow) {
+        shadow.style.opacity = '0.4';
+        shadow.style.width = '140px';
+        shadow.style.height = '20px';
+      }
+    }
+
+    // Fade out everything when user scrolls past hero
+    var gone = false;
+    window.addEventListener('scroll', function() {
+      if (gone) return;
+      if (window.scrollY > window.innerHeight * 0.5) {
+        hat.classList.add('is-gone');
+        if (shadow) shadow.classList.add('is-gone');
+        if (impact) impact.classList.add('is-gone');
+        gone = true;
+      }
+    }, { passive: true });
+  })();
+  </script>
 </section>
 
 <!-- Manifesto: Cada scroll salva una vida -->

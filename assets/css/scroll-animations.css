@@ -587,6 +587,12 @@
     opacity: 1 !important;
   }
   .dust-canvas { display: none; }
+  .hat-scene,
+  .hat-shadow,
+  .hat-impact {
+    animation: none !important;
+    transition: none !important;
+  }
   .warning-tape,
   .cone,
   .harness-rope,

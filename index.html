@@ -395,6 +395,141 @@ title: "La Zona Segura — Tu referencia en seguridad industrial"
       .hat-dust:nth-child(n+9) { display: none; }
     }
 
+    /* --- Falling Bricks --- */
+    .brick {
+      position: absolute;
+      width: var(--bw, 52px);
+      height: var(--bh, 26px);
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 9;
+      transform-style: preserve-3d;
+      will-change: transform, opacity;
+      opacity: 0;
+      background:
+        linear-gradient(135deg,
+          var(--b1, #a0522d) 0%,
+          var(--b2, #8b4513) 40%,
+          var(--b3, #6b3410) 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        inset 0 -2px 0 rgba(0,0,0,0.25),
+        0 2px 8px rgba(0,0,0,0.4);
+    }
+    /* Mortar line across center */
+    .brick::before {
+      content: '';
+      position: absolute;
+      top: 48%;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: rgba(0,0,0,0.2);
+    }
+    /* Top highlight edge */
+    .brick::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+    }
+    .brick.is-falling {
+      animation: brick-fall var(--b-dur, 0.65s) cubic-bezier(.32,.8,.35,1.05) forwards;
+    }
+    @keyframes brick-fall {
+      0% {
+        transform:
+          translate(var(--bx, 0), -120px)
+          rotate(var(--br-start, -25deg))
+          rotateX(var(--brx, -15deg))
+          scale(0.8);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      70% {
+        transform:
+          translate(var(--bx, 0), calc(var(--by, 0px) + 4px))
+          rotate(var(--br-end, 5deg))
+          rotateX(2deg)
+          scale(1.02);
+      }
+      85% {
+        transform:
+          translate(var(--bx, 0), calc(var(--by, 0px) - 3px))
+          rotate(calc(var(--br-end, 5deg) - 2deg))
+          rotateX(-1deg)
+          scale(0.99);
+      }
+      100% {
+        transform:
+          translate(var(--bx, 0), var(--by, 0px))
+          rotate(var(--br-end, 5deg))
+          rotateX(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+    /* Brick dust puff on landing */
+    .brick-dust {
+      position: absolute;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(160,82,45,0.3) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 9;
+      opacity: 0;
+    }
+    .brick-dust.is-puffing {
+      animation: brick-dust-puff 0.6s ease-out forwards;
+    }
+    @keyframes brick-dust-puff {
+      0%   { transform: translate(var(--dx, 0), var(--dy, 0)) scale(0.5); opacity: 0.6; }
+      100% { transform: translate(var(--dx, 0), var(--dy, 0)) scale(2.5); opacity: 0; }
+    }
+    /* Hat reaction to brick impact */
+    .hardhat--3d.hat-hit {
+      animation: hat-hit-react 0.2s ease-out forwards;
+    }
+    @keyframes hat-hit-react {
+      0% {
+        transform:
+          translate(-50%, var(--hat-land))
+          scale(1)
+          rotateX(6deg) rotateY(-4deg) rotateZ(-6deg);
+      }
+      40% {
+        transform:
+          translate(-50%, calc(var(--hat-land) + 3px))
+          scale(0.97, 1.03)
+          rotateX(8deg) rotateY(-3deg) rotateZ(calc(-6deg + var(--hit-rot, 3deg)));
+      }
+      100% {
+        transform:
+          translate(-50%, var(--hat-land))
+          scale(1)
+          rotateX(6deg) rotateY(-4deg) rotateZ(-6deg);
+      }
+    }
+    /* Brick gone on scroll-away */
+    .brick-zone.is-gone .brick,
+    .brick-zone.is-gone .brick-dust {
+      transition: opacity 0.4s ease-out;
+      opacity: 0 !important;
+      animation: none !important;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 640px) {
+      .brick { --bw: 40px; --bh: 20px; }
+    }
+    @media (max-width: 480px) {
+      .brick { --bw: 34px; --bh: 17px; }
+    }
+
     /* --- Reduced motion --- */
     @media (prefers-reduced-motion: reduce) {
       .hardhat--3d {
@@ -403,6 +538,7 @@ title: "La Zona Segura — Tu referencia en seguridad industrial"
         opacity: 1 !important;
       }
       .hardhat--3d.is-landed { animation: none !important; }
+      .hardhat--3d.hat-hit { animation: none !important; }
       .hat-shadow {
         animation: none !important;
         opacity: 0.4 !important;
@@ -410,6 +546,8 @@ title: "La Zona Segura — Tu referencia en seguridad industrial"
         height: 20px !important;
       }
       .hat-impact { display: none; }
+      .brick { animation: none !important; opacity: 1 !important; }
+      .brick-dust { display: none; }
       .hardhat--3d.is-gone {
         transition: opacity 0.3s ease-out !important;
         transform: translate(-50%, var(--hat-land)) scale(1) rotateZ(-6deg) !important;
@@ -499,17 +637,178 @@ title: "La Zona Segura — Tu referencia en seguridad industrial"
       }
     }
 
+    // ---- Falling Bricks on Scroll ----
+    var brickZone = document.getElementById('brick-zone');
+    var hero = hat.closest('.hero') || hat.parentElement.parentElement;
+    var MAX_BRICKS = window.innerWidth <= 640 ? 5 : 8;
+    var SCROLL_START = 0.04; // start spawning at 4vh scroll
+    var SCROLL_END = 0.45;   // finish by 45vh
+    var brickCount = 0;
+    var brickTicking = false;
+    var hatLanded = false;
+
+    // Wait for hat animation to finish before allowing bricks
+    setTimeout(function() { hatLanded = true; }, ANIM_DELAY + ANIM_DUR + 200);
+
+    // Brick color palettes (terracotta, concrete, clay)
+    var BRICK_COLORS = [
+      { b1: '#a0522d', b2: '#8b4513', b3: '#6b3410' }, // terracotta
+      { b1: '#9c6644', b2: '#7f5539', b3: '#5c3d2e' }, // clay
+      { b1: '#8d8d8d', b2: '#6b6b6b', b3: '#4a4a4a' }, // concrete
+      { b1: '#b5651d', b2: '#964b00', b3: '#6e3600' }, // burnt sienna
+      { b1: '#a47148', b2: '#8b5e3c', b3: '#5e3a1a' }, // adobe
+    ];
+
+    // Pre-computed brick landing positions (spread around the hat)
+    // x offsets from center, y offsets from hat-land reference
+    var BRICK_SLOTS = [
+      { x: -85, y: 10, rot: -8 },
+      { x: 72,  y: 8,  rot: 12 },
+      { x: -42, y: -5, rot: 4 },
+      { x: 55,  y: -8, rot: -6 },
+      { x: -100,y: 22, rot: 15 },
+      { x: 95,  y: 18, rot: -11 },
+      { x: -20, y: 15, rot: 7 },
+      { x: 30,  y: 12, rot: -4 },
+    ];
+
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+
+    function spawnBrick(index) {
+      if (!brickZone || index >= MAX_BRICKS) return;
+      var slot = BRICK_SLOTS[index % BRICK_SLOTS.length];
+      var colors = BRICK_COLORS[index % BRICK_COLORS.length];
+      var hatLandVal = parseFloat(hat.style.getPropertyValue('--hat-land')) || 280;
+
+      // Create brick element
+      var brick = document.createElement('div');
+      brick.className = 'brick';
+      brick.style.left = '50%';
+      brick.style.top = '0';
+      brick.style.setProperty('--bx', slot.x + 'px');
+      brick.style.setProperty('--by', (hatLandVal + slot.y + rand(-5, 5)) + 'px');
+      brick.style.setProperty('--br-start', rand(-35, 35) + 'deg');
+      brick.style.setProperty('--br-end', (slot.rot + rand(-3, 3)) + 'deg');
+      brick.style.setProperty('--brx', rand(-20, 20) + 'deg');
+      brick.style.setProperty('--b-dur', rand(0.55, 0.75) + 's');
+      brick.style.setProperty('--b1', colors.b1);
+      brick.style.setProperty('--b2', colors.b2);
+      brick.style.setProperty('--b3', colors.b3);
+      // Slight size variation
+      var sizeScale = rand(0.85, 1.15);
+      var bw = Math.round((window.innerWidth <= 640 ? 40 : 52) * sizeScale);
+      var bh = Math.round(bw * 0.5);
+      brick.style.setProperty('--bw', bw + 'px');
+      brick.style.setProperty('--bh', bh + 'px');
+
+      brickZone.appendChild(brick);
+
+      // Trigger fall animation on next frame
+      requestAnimationFrame(function() {
+        brick.classList.add('is-falling');
+      });
+
+      // Calculate impact time (~70% of brick duration)
+      var bDur = parseFloat(brick.style.getPropertyValue('--b-dur')) * 1000 || 650;
+      var impactMs = bDur * 0.65;
+
+      setTimeout(function() {
+        // Hat hit reaction
+        if (hat.classList.contains('is-landed')) {
+          hat.classList.remove('hat-hit');
+          hat.style.setProperty('--hit-rot', (rand(-4, 4)) + 'deg');
+          void hat.offsetWidth; // force reflow to restart animation
+          hat.classList.add('hat-hit');
+          // Remove hat-hit after animation so idle can resume
+          setTimeout(function() {
+            hat.classList.remove('hat-hit');
+          }, 220);
+        }
+
+        // Spawn 2 dust puffs at brick landing position
+        for (var d = 0; d < 2; d++) {
+          var dust = document.createElement('div');
+          dust.className = 'brick-dust';
+          dust.style.left = '50%';
+          dust.style.top = '0';
+          var dustX = slot.x + rand(-20, 20);
+          var dustY = hatLandVal + slot.y + rand(-5, 10);
+          dust.style.setProperty('--dx', (d === 0 ? -rand(15, 30) : rand(15, 30)) + 'px');
+          dust.style.setProperty('--dy', rand(-8, 4) + 'px');
+          dust.style.transform = 'translate(' + dustX + 'px, ' + dustY + 'px)';
+          brickZone.appendChild(dust);
+          requestAnimationFrame(function() {
+            dust.classList.add('is-puffing');
+          });
+          // Cleanup dust after animation
+          (function(el) {
+            setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 700);
+          })(dust);
+        }
+      }, impactMs);
+
+      // Remove will-change after animation completes
+      brick.addEventListener('animationend', function() {
+        brick.style.willChange = 'auto';
+      }, { once: true });
+    }
+
+    // Scroll handler — rAF throttled
+    function onBrickScroll() {
+      if (brickTicking || !hatLanded || prefersReduced) return;
+      brickTicking = true;
+      requestAnimationFrame(function() {
+        brickTicking = false;
+        var scrollFrac = window.scrollY / window.innerHeight;
+        if (scrollFrac < SCROLL_START) return;
+
+        // How many bricks should exist at this scroll position
+        var progress = Math.min((scrollFrac - SCROLL_START) / (SCROLL_END - SCROLL_START), 1);
+        var target = Math.floor(progress * MAX_BRICKS);
+
+        while (brickCount < target) {
+          spawnBrick(brickCount);
+          brickCount++;
+        }
+      });
+    }
+
     // Fade out everything when user scrolls past hero
     var gone = false;
-    window.addEventListener('scroll', function() {
+    function onScrollFade() {
       if (gone) return;
       if (window.scrollY > window.innerHeight * 0.5) {
         hat.classList.add('is-gone');
         if (shadow) shadow.classList.add('is-gone');
         if (impact) impact.classList.add('is-gone');
+        if (brickZone) brickZone.classList.add('is-gone');
         gone = true;
       }
+    }
+
+    window.addEventListener('scroll', function() {
+      onBrickScroll();
+      onScrollFade();
     }, { passive: true });
+
+    // For reduced motion: show a few static bricks immediately
+    if (prefersReduced && brickZone) {
+      var hatLandVal = parseFloat(hat.style.getPropertyValue('--hat-land')) || 280;
+      for (var i = 0; i < 3; i++) {
+        var slot = BRICK_SLOTS[i];
+        var colors = BRICK_COLORS[i];
+        var b = document.createElement('div');
+        b.className = 'brick';
+        b.style.left = '50%';
+        b.style.top = '0';
+        b.style.opacity = '1';
+        b.style.transform = 'translate(' + slot.x + 'px, ' + (hatLandVal + slot.y) + 'px) rotate(' + slot.rot + 'deg)';
+        b.style.setProperty('--b1', colors.b1);
+        b.style.setProperty('--b2', colors.b2);
+        b.style.setProperty('--b3', colors.b3);
+        brickZone.appendChild(b);
+      }
+    }
   })();
   </script>
 </section>
